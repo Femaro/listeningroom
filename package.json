@@ -5,7 +5,6 @@
 	"scripts": {
 		"dev": "react-router dev",
 		"build": "react-router build",
-		"build:vercel": "node vercel-build.js",
 		"start": "react-router serve",
 		"typecheck": "react-router typegen && tsc --noEmit",
 		"vercel:deploy": "vercel --prod",

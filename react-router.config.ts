@@ -6,4 +6,10 @@ export default {
 	prerender: ['/*?'],
 	serverModuleFormat: 'esm',
 	serverBuildFile: 'index.js',
+	serverDependenciesToBundle: [],
+	serverConditions: [],
+	serverMainFields: [],
+	serverMinify: false,
+	serverPlatform: 'node',
+	serverPlugins: [],
 } satisfies Config;
