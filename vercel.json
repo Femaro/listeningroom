@@ -3,6 +3,11 @@
   "buildCommand": "npm run build",
   "outputDirectory": "build/client",
   "framework": "react-router",
+  "functions": {
+    "src/app/api/**/*.js": {
+      "runtime": "nodejs18.x"
+    }
+  },
   "rewrites": [
     {
       "source": "/api/(.*)",
@@ -41,11 +46,6 @@
       ]
     }
   ],
-  "functions": {
-    "src/app/api/**/*.js": {
-      "runtime": "nodejs18.x"
-    }
-  },
   "env": {
     "NODE_ENV": "production"
   }
