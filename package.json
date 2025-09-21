@@ -8,7 +8,6 @@
 		"build:vercel": "node vercel-build.js",
 		"start": "react-router serve",
 		"typecheck": "react-router typegen && tsc --noEmit",
-		"db:migrate": "node ./scripts/migrate.js",
 		"vercel:deploy": "vercel --prod",
 		"vercel:preview": "vercel",
 		"vercel:dev": "vercel dev",

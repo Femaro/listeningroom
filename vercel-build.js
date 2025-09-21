@@ -22,7 +22,7 @@ try {
 
   // Install dependencies
   console.log('📦 Installing dependencies...');
-  execSync('npm ci --only=production', { stdio: 'inherit' });
+  execSync('npm install', { stdio: 'inherit' });
 
   // Build the application
   console.log('🔨 Building application...');
@@ -41,6 +41,7 @@ try {
   }
 
   console.log('\n🎉 Vercel build ready for deployment!');
+  console.log('📝 Note: Using Firebase for database and authentication');
 
 } catch (error) {
   console.error('❌ Build failed:', error.message);
