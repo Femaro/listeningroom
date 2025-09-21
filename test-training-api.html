@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Training API</title>
+</head>
+<body>
+    <h1>Test Training Applications API</h1>
+    <button onclick="testSubmitApplication()">Test Submit Application</button>
+    <button onclick="testGetApplications()">Test Get Applications</button>
+    <div id="result"></div>
+
+    <script>
+        async function testSubmitApplication() {
+            const testData = {
+                name: "Test User",
+                email: "test@example.com",
+                phone: "+1234567890",
+                country: "United States",
+                city: "New York",
+                timezone: "UTC-05:00 (Eastern)",
+                background: "Software engineer with 5 years of experience",
+                experience: "Volunteered at local community center",
+                motivation: "Want to help people struggling with mental health issues",
+                trainingGoals: ["Learn active listening skills", "Understand crisis intervention"],
+                specializations: ["General Listening", "Anxiety Support"],
+                preferredLanguages: ["English", "Spanish"],
+                agreeToTerms: true,
+                agreeToTraining: true,
+                agreeToBackground: true
+            };
+
+            try {
+                const response = await fetch('/api/training-applications', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(testData),
+                });
+
+                const result = await response.json();
+                document.getElementById('result').innerHTML = `
+                    <h3>Submit Result:</h3>
+                    <pre>${JSON.stringify(result, null, 2)}</pre>
+                `;
+            } catch (error) {
+                document.getElementById('result').innerHTML = `
+                    <h3>Submit Error:</h3>
+                    <pre>${error.message}</pre>
+                `;
+            }
+        }
+
+        async function testGetApplications() {
+            try {
+                const response = await fetch('/api/training-applications');
+                const result = await response.json();
+                document.getElementById('result').innerHTML = `
+                    <h3>Get Applications Result:</h3>
+                    <pre>${JSON.stringify(result, null, 2)}</pre>
+                `;
+            } catch (error) {
+                document.getElementById('result').innerHTML = `
+                    <h3>Get Applications Error:</h3>
+                    <pre>${error.message}</pre>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>

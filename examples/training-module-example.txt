@@ -1,0 +1,94 @@
+# Module 1: Welcome & Platform Overview
+
+## Description
+Introduction to our mission, values, and platform features. This module provides volunteers with a comprehensive understanding of our platform and their role in supporting mental health.
+
+## Level
+Beginner (Level 1)
+
+## Required
+Yes
+
+## Duration
+15 minutes
+
+## Content
+
+### Our Mission
+Learn about our commitment to providing accessible mental health support globally. 
+
+We believe everyone deserves access to quality mental health resources, regardless of their location, financial situation, or background. Our platform connects trained volunteers with individuals who need emotional support, creating a safe space for healing and growth.
+
+Key principles:
+- Accessibility for all
+- Confidential and safe environment
+- Evidence-based support methods
+- Continuous learning and improvement
+
+### Platform Features
+Overview of all available tools and features for volunteers:
+
+**Dashboard Navigation:**
+- Easy-to-use interface
+- Real-time notifications
+- Progress tracking
+- Session management
+
+**Communication Tools:**
+- Secure messaging system
+- Voice and video calls
+- Crisis intervention protocols
+- Resource sharing capabilities
+
+**Learning Resources:**
+- Training modules
+- Best practices library
+- Case studies
+- Peer support forums
+
+### Code of Conduct
+Understanding our values and ethical guidelines:
+
+**Confidentiality:**
+- All conversations are strictly confidential
+- Never share personal information
+- Respect privacy boundaries
+- Report concerns through proper channels
+
+**Professional Boundaries:**
+- Maintain appropriate relationships
+- Set clear expectations
+- Know your limitations
+- Seek supervision when needed
+
+**Respect and Empathy:**
+- Treat everyone with dignity
+- Listen without judgment
+- Validate feelings and experiences
+- Practice cultural sensitivity
+
+**Continuous Learning:**
+- Stay updated on best practices
+- Participate in ongoing training
+- Seek feedback and improvement
+- Share knowledge with peers
+
+## Quiz Questions
+
+1. What is our primary mission?
+   a) To make money from volunteers
+   b) To provide free mental health support
+   c) To replace professional therapy
+   d) To conduct research studies
+
+2. How should you handle confidential information?
+   a) Share it with other volunteers
+   b) Keep it completely confidential
+   c) Post it online for awareness
+   d) Discuss it with friends
+
+3. What are the key principles of our platform?
+   a) Accessibility, confidentiality, evidence-based methods
+   b) Speed, efficiency, automation
+   c) Profit, growth, expansion
+   d) Competition, ranking, rewards

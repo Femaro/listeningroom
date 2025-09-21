@@ -1,0 +1,28 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  input, textarea, select, button {
+    @apply outline-none focus:outline-none;
+  }
+  
+  /* Global white theme overrides */
+  body {
+    @apply bg-white text-gray-900;
+  }
+  
+  /* Consistent button hover states */
+  .btn-primary {
+    @apply bg-blue-600 text-white hover:bg-blue-700 transition-colors duration-200;
+  }
+  
+  .btn-secondary {
+    @apply bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors duration-200;
+  }
+  
+  /* Consistent focus states */
+  .focus-ring {
+    @apply focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2;
+  }
+}
