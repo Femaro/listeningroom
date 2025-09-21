@@ -394,3 +394,4 @@ docker-compose up -d
    - Optimize queries
 
 This guide should help you successfully deploy your Listening Room application to any cloud hosting platform. Choose the option that best fits your needs and budget.
+

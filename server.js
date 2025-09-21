@@ -75,3 +75,4 @@ server.listen(port, host, () => {
   console.log(`📁 Serving files from: ${join(__dirname, 'build', 'client')}`);
   console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
 });
+
