@@ -21,25 +21,16 @@ import {
 } from 'react';
 import './global.css';
 
-import fetch from '@/__create/fetch';
-// @ts-ignore
-import { SessionProvider } from '@auth/create/react';
 import { useNavigate } from 'react-router';
 import { serializeError } from 'serialize-error';
 import { Toaster } from 'sonner';
 // @ts-ignore
 import { LoadFonts } from 'virtual:load-fonts.jsx';
-import { HotReloadIndicator } from '../__create/HotReload';
-import { useSandboxStore } from '../__create/hmr-sandbox-store';
 import '@/utils/firebase';
 import type { Route } from './+types/root';
-import { useDevServerHeartbeat } from '../__create/useDevServerHeartbeat';
 
 export const links = () => [];
 
-if (globalThis.window && globalThis.window !== undefined) {
-  globalThis.window.fetch = fetch;
-}
 
 function SharedErrorBoundary({
   isOpen,
@@ -339,7 +330,6 @@ export function Layout({ children }: { children: ReactNode }) {
   useHandshakeParent();
   useCodeGen();
   useRefresh();
-  useDevServerHeartbeat();
   const navigate = useNavigate();
   const location = useLocation();
   const pathname = location?.pathname;

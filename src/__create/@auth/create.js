@@ -1,9 +1,9 @@
 import { getToken } from '@auth/core/jwt';
-import { getContext } from 'hono/context-storage';
+// Removed Hono dependency
 
 export default function CreateAuth() {
 	const auth = async () => {
-		const c = getContext();
+		// const c = getContext(); // Removed Hono dependency
 		const token = await getToken({
 			req: c.req.raw,
 			secret: process.env.AUTH_SECRET,
