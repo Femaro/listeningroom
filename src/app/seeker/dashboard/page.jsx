@@ -105,8 +105,8 @@ export default function SeekerDashboard() {
                   Our platform is here to provide emotional support and someone
                   to listen.
                 </p>
-                <div className="bg-gradient-to-r from-teal-500/20 to-blue-500/20 border border-teal-400/30 rounded-xl p-4">
-                  <p className="text-teal-200 font-medium text-sm">
+                <div className="bg-gradient-to-r from-teal-600/90 to-blue-600/90 border border-teal-500 rounded-xl p-4">
+                  <p className="text-white font-semibold text-sm">
                     🔒 100% confidential • 💝 First 5 minutes free • 🌍
                     Available 24/7
                   </p>
