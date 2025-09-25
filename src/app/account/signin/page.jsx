@@ -25,6 +25,14 @@ function MainComponent() {
 
     try {
       const cred = await signInWithEmailAndPassword(auth, email, password);
+      
+      // Check if email is verified
+      if (!cred.user.emailVerified) {
+        setError("Please verify your email address before signing in. Check your inbox for a verification email.");
+        setLoading(false);
+        return;
+      }
+      
       // Route based on userType stored in Firestore
       try {
         const userDoc = await getDoc(doc(db, "users", cred.user.uid));

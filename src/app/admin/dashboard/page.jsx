@@ -65,10 +65,11 @@ import VideoManagement from "@/components/admin/VideoManagement";
 import AdminLayout from "@/components/admin/AdminLayout";
 
 export default function AdminDashboard() {
-  const { user, userProfile } = useFirebaseAuth();
+  const { user, userProfile, loading: authLoading } = useFirebaseAuth();
   const [activeTab, setActiveTab] = useState("overview");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [initialized, setInitialized] = useState(false);
 
   // Data states
   const [sessions, setSessions] = useState([]);
@@ -122,14 +123,31 @@ export default function AdminDashboard() {
 
   // Load data
   useEffect(() => {
-    if (!user) return;
+    if (authLoading) return;
+    
+    if (!user) {
+      setError("Please sign in to access the admin dashboard.");
+      setLoading(false);
+      return;
+    }
 
-    setLoading(true);
-    loadAllData();
-  }, [user]);
+    if (userProfile && userProfile.userType !== "admin") {
+      setError("Access denied. Admin privileges required.");
+      setLoading(false);
+      return;
+    }
+
+    if (user && userProfile?.userType === "admin") {
+      setLoading(true);
+      setError(null);
+      loadAllData();
+    }
+  }, [user, userProfile, authLoading]);
 
   const loadAllData = async () => {
     try {
+      console.log("Loading admin dashboard data...");
+      
       // Load sessions
       const sessionsQuery = query(collection(db, "sessions"), orderBy("createdAt", "desc"));
       const sessionsUnsubscribe = onSnapshot(sessionsQuery, (snapshot) => {
@@ -223,7 +241,7 @@ export default function AdminDashboard() {
       };
     } catch (error) {
       console.error("Error loading admin data:", error);
-      setError("Failed to load admin data");
+      setError(`Failed to load admin data: ${error.message}`);
       setLoading(false);
     }
   };
@@ -596,6 +614,38 @@ export default function AdminDashboard() {
           >
             Retry
           </button>
+        </div>
+      </div>
+    );
+  }
+
+  // Loading state
+  if (authLoading || loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading admin dashboard...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="bg-red-50 border border-red-200 rounded-lg p-6 max-w-md">
+            <h2 className="text-lg font-semibold text-red-800 mb-2">Error Loading Dashboard</h2>
+            <p className="text-red-600 mb-4">{error}</p>
+            <button
+              onClick={() => window.location.reload()}
+              className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors"
+            >
+              Retry
+            </button>
+          </div>
         </div>
       </div>
     );

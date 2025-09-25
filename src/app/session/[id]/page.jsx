@@ -19,6 +19,7 @@ export default function SessionRoom({ params }) {
   const [localStream, setLocalStream] = useState(null);
   const [remoteStreams, setRemoteStreams] = useState(new Map());
   const [isSpeakerOn, setIsSpeakerOn] = useState(true);
+  const [showLeaveOptions, setShowLeaveOptions] = useState(false);
 
   const localVideoRef = useRef(null);
   const remoteVideoRefs = useRef(new Map());
@@ -41,6 +42,7 @@ export default function SessionRoom({ params }) {
         console.log("Session data received:", { id: doc.id, ...sessionData });
         setSession({ ...sessionData, id: doc.id });
         setParticipants(sessionData.participants || []);
+        setMessages(sessionData.messages || []);
         setLoading(false);
       } else {
         console.log("Session not found:", sessionId);
@@ -222,9 +224,14 @@ export default function SessionRoom({ params }) {
 
   const createSimpleConnection = async (peerConnection, userId) => {
     try {
-      // For a simple demo, we'll create a basic connection
-      // In a real app, you'd use a signaling server to exchange offers/answers
-      console.log("Creating simple connection for:", userId);
+      console.log("Creating connection for:", userId);
+      
+      // Add local stream to peer connection
+      if (localStreamRef.current) {
+        localStreamRef.current.getTracks().forEach(track => {
+          peerConnection.addTrack(track, localStreamRef.current);
+        });
+      }
       
       // Create offer
       const offer = await peerConnection.createOffer({
@@ -235,14 +242,28 @@ export default function SessionRoom({ params }) {
       await peerConnection.setLocalDescription(offer);
       console.log("Created offer for:", userId);
       
-      // For demo purposes, we'll create a loopback connection
-      // This simulates receiving an answer from the other peer
+      // Handle remote stream
+      peerConnection.ontrack = (event) => {
+        console.log("Received remote stream for:", userId);
+        const remoteStream = event.streams[0];
+        setRemoteStreams(prev => new Map(prev.set(userId, remoteStream)));
+        
+        // Set up remote audio element
+        const remoteAudio = remoteVideoRefs.current.get(userId);
+        if (remoteAudio) {
+          remoteAudio.srcObject = remoteStream;
+          remoteAudio.play().catch(e => console.error("Error playing remote audio:", e));
+        }
+      };
+      
+      // For demo purposes, create a simple connection
+      // In production, you'd exchange offers/answers via signaling server
       setTimeout(async () => {
         try {
           const answer = await peerConnection.createAnswer();
           await peerConnection.setRemoteDescription(offer);
           await peerConnection.setLocalDescription(answer);
-          console.log("Created answer for:", userId);
+          console.log("Connection established for:", userId);
         } catch (error) {
           console.error("Error creating answer:", error);
         }
@@ -277,7 +298,7 @@ export default function SessionRoom({ params }) {
     console.log("Speaker toggled:", newSpeakerState ? "ON" : "OFF");
   };
 
-  const leaveSession = async () => {
+  const leaveSession = async (endForAll = false) => {
     try {
       // Stop local stream
       if (localStreamRef.current) {
@@ -288,51 +309,69 @@ export default function SessionRoom({ params }) {
       peerConnections.current.forEach(pc => pc.close());
       peerConnections.current.clear();
 
-      // Remove user from session
+      // Remove user from session or end session for all
       if (session && user) {
-        // Find the participant object to remove
-        const participantToRemove = participants.find(p => p.userId === user.uid);
-        if (participantToRemove) {
+        if (endForAll) {
+          // End session for all participants
           await updateDoc(doc(db, "sessions", session.id), {
-            participants: arrayRemove(participantToRemove),
-            currentParticipants: Math.max(0, session.currentParticipants - 1),
+            status: "ended",
+            endedBy: user.uid,
+            endedAt: serverTimestamp(),
             updatedAt: serverTimestamp(),
           });
+        } else {
+          // Remove only current user
+          const participantToRemove = participants.find(p => p.userId === user.uid);
+          if (participantToRemove) {
+            await updateDoc(doc(db, "sessions", session.id), {
+              participants: arrayRemove(participantToRemove),
+              currentParticipants: Math.max(0, session.currentParticipants - 1),
+              updatedAt: serverTimestamp(),
+            });
+          }
         }
       }
 
       // Redirect based on user type
-      const userType = userProfile?.userType || "seeker";
+      const userType = user?.userType || "seeker";
       window.location.href = userType === "volunteer" 
         ? "/volunteer/dashboard" 
         : "/seeker/dashboard";
     } catch (error) {
       console.error("Error leaving session:", error);
+      alert("Error leaving session. Please try again.");
     }
   };
 
   const sendMessage = async (e) => {
     e.preventDefault();
-    if (!newMessage.trim() || !session) return;
+    if (!newMessage.trim() || !session || !user) {
+      console.log("Cannot send message:", { newMessage: newMessage.trim(), session: !!session, user: !!user });
+      return;
+    }
 
     try {
       const message = {
         id: Date.now().toString(),
         userId: user.uid,
-        userName: user.displayName || "Anonymous",
+        userName: user.displayName || user.email || "Anonymous",
         message: newMessage.trim(),
         timestamp: serverTimestamp(),
         type: "text"
       };
+
+      console.log("Sending message:", message);
 
       await updateDoc(doc(db, "sessions", session.id), {
         messages: arrayUnion(message),
         updatedAt: serverTimestamp(),
       });
 
+      console.log("Message sent successfully");
       setNewMessage("");
     } catch (error) {
       console.error("Error sending message:", error);
+      alert("Failed to send message. Please try again.");
     }
   };
 
@@ -397,12 +436,39 @@ export default function SessionRoom({ params }) {
               <Users className="w-5 h-5 text-gray-400" />
               <span className="text-sm">{participants.length}/{session.maxParticipants}</span>
             </div>
-            <button
-              onClick={leaveSession}
-              className="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-lg transition-colors"
-            >
-              Leave Session
-            </button>
+            <div className="relative">
+              <button
+                onClick={() => setShowLeaveOptions(!showLeaveOptions)}
+                className="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-lg transition-colors"
+              >
+                Leave Session
+              </button>
+              
+              {showLeaveOptions && (
+                <div className="absolute right-0 mt-2 w-48 bg-gray-800 rounded-lg shadow-lg border border-gray-700 z-50">
+                  <div className="py-2">
+                    <button
+                      onClick={() => {
+                        setShowLeaveOptions(false);
+                        leaveSession(false);
+                      }}
+                      className="w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-gray-700"
+                    >
+                      Leave for myself
+                    </button>
+                    <button
+                      onClick={() => {
+                        setShowLeaveOptions(false);
+                        leaveSession(true);
+                      }}
+                      className="w-full text-left px-4 py-2 text-sm text-red-400 hover:bg-gray-700"
+                    >
+                      End session for all
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>

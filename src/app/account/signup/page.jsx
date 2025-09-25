@@ -66,8 +66,13 @@ function MainComponent() {
       };
       await sendEmailVerification(cred.user, actionCodeSettings);
       
-      // Redirect to onboarding flow
-      window.location.href = "/onboarding";
+      setSuccess("Account created successfully! Please check your email and verify your account before signing in.");
+      setLoading(false);
+      
+      // Redirect to onboarding flow after a delay
+      setTimeout(() => {
+        window.location.href = "/onboarding";
+      }, 3000);
     } catch (err) {
       const errorMessages = {
         OAuthSignin:

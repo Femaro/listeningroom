@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Search, Filter, Mic, MessageCircle, Clock, Users, Globe, Lock, Play } from "lucide-react";
+import { Search, Filter, Mic, MessageCircle, Clock, Users, Globe, Lock, Play, ArrowLeft, Home, User } from "lucide-react";
 import useFirebaseAuth from "@/utils/useFirebaseAuth";
 import { db } from "@/utils/firebase";
 import { collection, query, where, orderBy, onSnapshot, doc, updateDoc, arrayUnion, serverTimestamp } from "firebase/firestore";
@@ -123,6 +123,40 @@ export default function BrowseSessions() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Navigation Header */}
+      <div className="bg-white shadow-sm border-b">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center py-4">
+            <div className="flex items-center space-x-4">
+              <button
+                onClick={() => window.history.back()}
+                className="flex items-center text-gray-600 hover:text-gray-900 transition-colors"
+              >
+                <ArrowLeft className="w-5 h-5 mr-2" />
+                Back
+              </button>
+              <div className="h-6 w-px bg-gray-300"></div>
+              <button
+                onClick={() => window.location.href = '/seeker/dashboard'}
+                className="flex items-center text-gray-600 hover:text-gray-900 transition-colors"
+              >
+                <Home className="w-5 h-5 mr-2" />
+                Dashboard
+              </button>
+            </div>
+            <div className="flex items-center space-x-4">
+              <button
+                onClick={() => window.location.href = '/seeker/dashboard'}
+                className="flex items-center text-gray-600 hover:text-gray-900 transition-colors"
+              >
+                <User className="w-5 h-5 mr-2" />
+                Profile
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div className="max-w-6xl mx-auto px-4 py-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Available Sessions</h1>
