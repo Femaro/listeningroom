@@ -417,8 +417,31 @@ export default function SessionRoom({ params }) {
         console.log("Attempting to fix corrupted session data...");
         const fixed = await fixCorruptedSession();
         if (fixed) {
-          alert("Session data has been fixed. Please try sending your message again.");
-          return;
+          // Automatically retry sending the message after fixing
+          try {
+            const message = {
+              id: Date.now().toString(),
+              userId: user.uid,
+              userName: user.displayName || user.email || "Anonymous",
+              message: newMessage.trim(),
+              timestamp: serverTimestamp(),
+              type: "text"
+            };
+
+            const sessionRef = doc(db, "sessions", session.id);
+            await setDoc(sessionRef, {
+              messages: [message], // Start fresh with just this message
+              updatedAt: serverTimestamp(),
+            }, { merge: true });
+
+            console.log("Message sent successfully after data repair");
+            setNewMessage("");
+            return;
+          } catch (retryError) {
+            console.error("Failed to send message even after data repair:", retryError);
+            alert("Session data has been fixed, but there was still an error sending your message. Please try again.");
+            return;
+          }
         }
       }
       
