@@ -15,26 +15,55 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase (singleton across HMR/reloads)
-export const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
+let app;
+try {
+  app = getApps().length ? getApp() : initializeApp(firebaseConfig);
+} catch (error) {
+  console.error('Firebase initialization error:', error);
+  // Fallback initialization
+  app = initializeApp(firebaseConfig);
+}
+
+export { app };
 
 // Initialize Analytics only on the client and when supported
 let analyticsInstance: Analytics | undefined;
 if (typeof window !== 'undefined') {
-  void isSupported()
-    .then((supported) => {
-      if (supported) {
-        analyticsInstance = getAnalytics(app);
-      }
-    })
-    .catch(() => {
-      // No-op if analytics isn't supported
-    });
+  try {
+    void isSupported()
+      .then((supported) => {
+        if (supported) {
+          analyticsInstance = getAnalytics(app);
+        }
+      })
+      .catch((error) => {
+        console.warn('Analytics initialization failed:', error);
+      });
+  } catch (error) {
+    console.warn('Analytics setup failed:', error);
+  }
 }
 
 export const analytics = analyticsInstance;
 
 // Firebase Auth & Firestore (web)
-export const auth = getAuth(app);
-export const db = getFirestore(app);
+let auth, db;
+try {
+  auth = getAuth(app);
+  db = getFirestore(app);
+} catch (error) {
+  console.error('Firebase services initialization error:', error);
+  // Re-initialize app if needed
+  try {
+    app = initializeApp(firebaseConfig);
+    auth = getAuth(app);
+    db = getFirestore(app);
+  } catch (retryError) {
+    console.error('Firebase retry initialization failed:', retryError);
+    throw retryError;
+  }
+}
+
+export { auth, db };
 
 

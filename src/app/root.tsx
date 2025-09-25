@@ -5,29 +5,20 @@ import {
   Scripts,
   ScrollRestoration,
   useAsyncError,
-  useLocation,
   useRouteError,
 } from 'react-router';
 
-import { useButton } from '@react-aria/button';
 import {
-  useCallback,
   useEffect,
-  useRef,
   useState,
   type ReactNode,
-  type FC,
-  Component,
 } from 'react';
 import './global.css';
 
-import { useNavigate } from 'react-router';
-import { serializeError } from 'serialize-error';
 import { Toaster } from 'sonner';
 // @ts-ignore
 import { LoadFonts } from 'virtual:load-fonts.jsx';
 import '@/utils/firebase';
-import type { Route } from './+types/root';
 
 export const links = () => [];
 
@@ -46,10 +37,20 @@ function SharedErrorBoundary({
 
   useEffect(() => {
     const handleError = (event: ErrorEvent) => {
+      // Ignore AbortError as it's often not critical
+      if (event.error?.name === 'AbortError') {
+        console.warn('AbortError caught and ignored:', event.error);
+        return;
+      }
       setErrorBoundaryError(event.error);
     };
 
     const handleUnhandledRejection = (event: PromiseRejectionEvent) => {
+      // Ignore AbortError as it's often not critical
+      if (event.reason?.name === 'AbortError') {
+        console.warn('AbortError promise rejection caught and ignored:', event.reason);
+        return;
+      }
       setErrorBoundaryError(new Error(event.reason));
     };
 
@@ -87,10 +88,6 @@ function SharedErrorBoundary({
 }
 
 export function Layout({ children }: { children: ReactNode }) {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const pathname = location?.pathname;
-
   return (
     <html lang="en">
       <head>
