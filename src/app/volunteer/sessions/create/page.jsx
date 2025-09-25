@@ -111,6 +111,7 @@ export default function CreateSession() {
         updatedAt: serverTimestamp(),
         participants: [],
         currentParticipants: 0,
+        messages: [], // Initialize messages array
       };
 
       await addDoc(collection(db, "sessions"), sessionData);

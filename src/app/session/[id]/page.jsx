@@ -362,16 +362,43 @@ export default function SessionRoom({ params }) {
 
       console.log("Sending message:", message);
 
-      await updateDoc(doc(db, "sessions", session.id), {
-        messages: arrayUnion(message),
+      // Check if messages array exists, if not create it
+      const updateData = {
         updatedAt: serverTimestamp(),
-      });
+      };
+
+      if (session.messages && Array.isArray(session.messages)) {
+        // Messages array exists, use arrayUnion
+        updateData.messages = arrayUnion(message);
+      } else {
+        // Messages array doesn't exist, create it with the first message
+        updateData.messages = [message];
+      }
+
+      await updateDoc(doc(db, "sessions", session.id), updateData);
 
       console.log("Message sent successfully");
       setNewMessage("");
     } catch (error) {
       console.error("Error sending message:", error);
-      alert("Failed to send message. Please try again.");
+      console.error("Error details:", {
+        code: error.code,
+        message: error.message,
+        sessionId: session.id,
+        hasMessages: !!session.messages,
+        messagesType: typeof session.messages
+      });
+      
+      let errorMessage = "Failed to send message. Please try again.";
+      if (error.code === 'permission-denied') {
+        errorMessage = "You don't have permission to send messages in this session.";
+      } else if (error.code === 'not-found') {
+        errorMessage = "Session not found. Please refresh the page.";
+      } else if (error.message.includes('arrayUnion')) {
+        errorMessage = "Session data is corrupted. Please refresh the page.";
+      }
+      
+      alert(errorMessage);
     }
   };
 
