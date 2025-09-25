@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { Mic, MicOff, Phone, PhoneOff, MessageCircle, Users, Settings, Volume2, VolumeX } from "lucide-react";
 import useFirebaseAuth from "@/utils/useFirebaseAuth";
 import { db } from "@/utils/firebase";
-import { doc, onSnapshot, updateDoc, arrayUnion, arrayRemove, serverTimestamp } from "firebase/firestore";
+import { doc, onSnapshot, updateDoc, arrayUnion, arrayRemove, serverTimestamp, setDoc } from "firebase/firestore";
 
 export default function SessionRoom({ params }) {
   const { user } = useFirebaseAuth();
@@ -343,6 +343,25 @@ export default function SessionRoom({ params }) {
     }
   };
 
+  const fixCorruptedSession = async () => {
+    try {
+      console.log("Attempting to fix corrupted session data...");
+      const sessionRef = doc(db, "sessions", session.id);
+      
+      // Reset messages to empty array and fix any other issues
+      await setDoc(sessionRef, {
+        messages: [],
+        updatedAt: serverTimestamp(),
+      }, { merge: true });
+      
+      console.log("Session data fixed successfully");
+      return true;
+    } catch (error) {
+      console.error("Failed to fix session data:", error);
+      return false;
+    }
+  };
+
   const sendMessage = async (e) => {
     e.preventDefault();
     if (!newMessage.trim() || !session || !user) {
@@ -362,20 +381,22 @@ export default function SessionRoom({ params }) {
 
       console.log("Sending message:", message);
 
-      // Check if messages array exists, if not create it
-      const updateData = {
+      // Always use setDoc with merge to ensure proper array handling
+      const sessionRef = doc(db, "sessions", session.id);
+      
+      // Get current messages or initialize empty array
+      const currentMessages = session.messages && Array.isArray(session.messages) 
+        ? session.messages 
+        : [];
+      
+      // Add new message to the array
+      const updatedMessages = [...currentMessages, message];
+      
+      // Use setDoc with merge to update the messages array
+      await setDoc(sessionRef, {
+        messages: updatedMessages,
         updatedAt: serverTimestamp(),
-      };
-
-      if (session.messages && Array.isArray(session.messages)) {
-        // Messages array exists, use arrayUnion
-        updateData.messages = arrayUnion(message);
-      } else {
-        // Messages array doesn't exist, create it with the first message
-        updateData.messages = [message];
-      }
-
-      await updateDoc(doc(db, "sessions", session.id), updateData);
+      }, { merge: true });
 
       console.log("Message sent successfully");
       setNewMessage("");
@@ -386,15 +407,29 @@ export default function SessionRoom({ params }) {
         message: error.message,
         sessionId: session.id,
         hasMessages: !!session.messages,
-        messagesType: typeof session.messages
+        messagesType: typeof session.messages,
+        messagesValue: session.messages,
+        isArray: Array.isArray(session.messages)
       });
+      
+      // Try to fix corrupted session data
+      if (error.code === 'invalid-argument' || error.message.includes('corrupted')) {
+        console.log("Attempting to fix corrupted session data...");
+        const fixed = await fixCorruptedSession();
+        if (fixed) {
+          alert("Session data has been fixed. Please try sending your message again.");
+          return;
+        }
+      }
       
       let errorMessage = "Failed to send message. Please try again.";
       if (error.code === 'permission-denied') {
         errorMessage = "You don't have permission to send messages in this session.";
       } else if (error.code === 'not-found') {
         errorMessage = "Session not found. Please refresh the page.";
-      } else if (error.message.includes('arrayUnion')) {
+      } else if (error.code === 'invalid-argument') {
+        errorMessage = "Invalid session data. Please refresh the page.";
+      } else if (error.message.includes('arrayUnion') || error.message.includes('corrupted')) {
         errorMessage = "Session data is corrupted. Please refresh the page.";
       }
       
