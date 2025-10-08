@@ -60,11 +60,19 @@ function MainComponent() {
       const cred = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
       await updateProfile(cred.user, { displayName: formData.name });
       
-      const actionCodeSettings = {
-        url: `${window.location.origin}/onboarding`,
-        handleCodeInApp: false,
-      };
-      await sendEmailVerification(cred.user, actionCodeSettings);
+      // Try to send email verification, but don't fail if domain isn't configured
+      try {
+        const actionCodeSettings = {
+          url: window.location.origin + '/onboarding',
+          handleCodeInApp: false,
+        };
+        
+        await sendEmailVerification(cred.user, actionCodeSettings);
+        console.log('Email verification sent successfully');
+      } catch (emailError) {
+        console.warn('Email verification failed, but user was created:', emailError);
+        // Don't throw the error - user creation was successful
+      }
       
       setSuccess("Account created successfully! Please check your email and verify your account before signing in.");
       setLoading(false);
@@ -74,7 +82,18 @@ function MainComponent() {
         window.location.href = "/onboarding";
       }, 3000);
     } catch (err) {
+      console.error('Signup error:', err);
+      
       const errorMessages = {
+        'auth/email-already-in-use': 'This email is already registered. Please sign in instead.',
+        'auth/invalid-email': 'Please enter a valid email address.',
+        'auth/weak-password': 'Password must be at least 8 characters long.',
+        'auth/operation-not-allowed': 'Email sign-up is not enabled. Please contact support.',
+        'auth/unauthorized-continue-url': 'Domain not configured. Please try again or contact support.',
+        'auth/invalid-continue-url': 'Invalid redirect URL. Please try again.',
+        'auth/missing-continue-uri': 'Redirect URL is missing. Please try again.',
+        'auth/network-request-failed': 'Network error. Please check your connection and try again.',
+        'auth/too-many-requests': 'Too many attempts. Please wait a moment and try again.',
         OAuthSignin:
           "Couldn't start sign-up. Please try again or use a different method.",
         OAuthCallback: "Sign-up failed after redirecting. Please try again.",
@@ -93,7 +112,13 @@ function MainComponent() {
         Verification: "Your sign-up link has expired. Request a new one.",
       };
 
-      setError(errorMessages[err?.code] || err?.message || "Something went wrong. Please try again.");
+      // Special handling for domain errors
+      if (err?.code === 'auth/unauthorized-continue-url') {
+        setError("Domain configuration issue. Please try again in a few minutes or contact support if the problem persists.");
+      } else {
+        setError(errorMessages[err?.code] || err?.message || "Something went wrong. Please try again.");
+      }
+      
       setLoading(false);
     }
   };
