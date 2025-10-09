@@ -6,7 +6,6 @@ import {
   ScrollRestoration,
   useAsyncError,
   useRouteError,
-  useLocation,
 } from 'react-router';
 
 import {
