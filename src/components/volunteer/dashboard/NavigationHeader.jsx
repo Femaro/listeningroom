@@ -38,25 +38,22 @@ export default function NavigationHeader({
 
   return (
     <>
-      <header className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-40">
+      {/* Dashboard Sub-Navigation */}
+      <div className="bg-white/95 backdrop-blur-xl border-b border-teal-100/50 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            {/* Logo */}
-            <div className="flex items-center space-x-4">
-              <img
-                src="https://ucarecdn.com/e05f1122-ee17-479a-b4b8-456584592d00/-/format/auto/"
-                alt="Listening Room"
-                className="h-8 w-auto"
-              />
-              <div className="hidden md:block">
-                <h1 className="text-xl font-bold text-gray-900">
-                  Volunteer Dashboard
-                </h1>
+          <div className="flex items-center justify-between h-14">
+            {/* Dashboard Title */}
+            <div className="flex items-center space-x-3">
+              <div className="p-1.5 bg-gradient-to-br from-emerald-100 to-teal-100 rounded-xl">
+                <Home className="w-5 h-5 text-emerald-600" />
               </div>
+              <h2 className="text-lg font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
+                Volunteer Dashboard
+              </h2>
             </div>
 
             {/* Desktop Navigation */}
-            <nav className="hidden md:flex items-center space-x-6">
+            <nav className="hidden md:flex items-center space-x-4">
               <a
                 href="/volunteer/dashboard"
                 className="flex items-center space-x-2 px-3 py-2 text-teal-600 bg-teal-50 rounded-lg font-medium"
@@ -155,7 +152,7 @@ export default function NavigationHeader({
             </button>
           </div>
         </div>
-      </header>
+      </div>
 
       {/* Mobile Menu Overlay */}
       {showMobileMenu && (
