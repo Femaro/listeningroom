@@ -69,8 +69,8 @@ export default function GlobalFeatures() {
           {features.map((feature, index) => (
             <div key={index} className="group">
               <div className={`bg-white/95 backdrop-blur-xl rounded-3xl p-8 shadow-xl border border-teal-100/60 hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300`}>
-                <div className={`bg-gradient-to-br ${feature.bgGradient} w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300`}>
-                  <feature.icon className={`w-8 h-8 bg-gradient-to-br ${feature.gradient} bg-clip-text text-transparent`} style={{WebkitTextFillColor: 'transparent', WebkitBackgroundClip: 'text'}} />
+                <div className={`bg-gradient-to-br ${feature.bgGradient} w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
+                  <feature.icon className="w-8 h-8 text-teal-600" />
                 </div>
                 <div className={`text-4xl font-bold bg-gradient-to-r ${feature.gradient} bg-clip-text text-transparent mb-2`}>
                   {feature.stat}
