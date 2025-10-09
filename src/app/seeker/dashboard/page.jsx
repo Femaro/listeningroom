@@ -137,12 +137,20 @@ export default function SeekerDashboard() {
                 </div>
               </div>
               
-              <button
-                onClick={() => setShowHelp(true)}
-                className="w-full mt-6 bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-600 hover:to-teal-600 text-white px-6 py-4 rounded-2xl font-bold transition-all duration-300 transform hover:-translate-y-1 shadow-xl hover:shadow-2xl relative z-10"
-              >
-                Learn How It Works
-              </button>
+              <div className="grid grid-cols-2 gap-3 mt-6">
+                <a
+                  href="/documentation"
+                  className="flex items-center justify-center space-x-2 bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-600 hover:to-teal-600 text-white px-4 py-3 rounded-xl font-bold transition-all duration-300 transform hover:-translate-y-1 shadow-xl hover:shadow-2xl relative z-10 text-sm"
+                >
+                  <span>📖 Documentation</span>
+                </a>
+                <button
+                  onClick={() => setShowHelp(true)}
+                  className="bg-white border-2 border-teal-500 text-teal-700 px-4 py-3 rounded-xl font-bold hover:bg-teal-50 transition-all duration-300 relative z-10 text-sm"
+                >
+                  Quick Help
+                </button>
+              </div>
             </div>
           </div>
         </div>

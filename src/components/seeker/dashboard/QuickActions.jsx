@@ -1,9 +1,17 @@
 "use client";
 
-import { AlertCircle, Calendar, History, Gift, ArrowRight, MessageCircle } from "lucide-react";
+import { AlertCircle, Calendar, History, Gift, ArrowRight, MessageCircle, BookOpen } from "lucide-react";
 
 export default function QuickActions() {
   const actions = [
+    {
+      title: "📖 How to Use Platform",
+      description: "Step-by-step guides for all features",
+      icon: BookOpen,
+      href: "/documentation",
+      color: "purple",
+      featured: true,
+    },
     {
       title: "Crisis Resources",
       description: "Immediate help and emergency contacts",
@@ -53,6 +61,7 @@ export default function QuickActions() {
         {actions.map((action) => {
           const Icon = action.icon;
           const colorClasses = {
+            purple: "bg-purple-50 text-purple-700 hover:bg-purple-100 border-purple-200",
             red: "bg-red-50 text-red-700 hover:bg-red-100 border-red-200",
             gray: "bg-gray-50 text-gray-700 hover:bg-gray-100 border-gray-200",
             green:
@@ -65,7 +74,7 @@ export default function QuickActions() {
             <a
               key={action.title}
               href={action.href}
-              className={`block p-4 rounded-lg border transition-colors ${colorClasses[action.color]} ${action.urgent ? "ring-2 ring-red-300" : ""}`}
+              className={`block p-4 rounded-lg border transition-colors ${colorClasses[action.color]} ${action.urgent ? "ring-2 ring-red-300" : ""} ${action.featured ? "ring-2 ring-purple-300" : ""}`}
             >
               <div className="flex items-start space-x-3">
                 <Icon className="w-5 h-5 mt-1 flex-shrink-0" />

@@ -94,9 +94,17 @@ export default function CreateSession() {
         throw new Error("You must be online and available to create a session");
       }
 
+      // Extract country from userProfile.location (format: "City, Country")
+      let volunteerCountry = "Unknown";
+      if (userProfile?.location) {
+        const locationParts = userProfile.location.split(",");
+        volunteerCountry = locationParts.length > 1 ? locationParts[locationParts.length - 1].trim() : locationParts[0].trim();
+      }
+
       const sessionData = {
         volunteerId: user.uid,
         volunteerName: userProfile?.name || user.displayName,
+        volunteerCountry: volunteerCountry, // Add country for filtering
         title: formData.title,
         description: formData.description,
         sessionType: formData.sessionType,

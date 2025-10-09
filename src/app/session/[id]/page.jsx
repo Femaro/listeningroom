@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { Mic, MicOff, Phone, PhoneOff, MessageCircle, Users, Settings, Volume2, VolumeX, Shield } from "lucide-react";
+import { Mic, MicOff, Phone, PhoneOff, MessageCircle, Users, Settings, Volume2, VolumeX, Shield, Moon, Sun } from "lucide-react";
 import useFirebaseAuth from "@/utils/useFirebaseAuth";
 import { db } from "@/utils/firebase";
 import { doc, onSnapshot, updateDoc, arrayUnion, arrayRemove, serverTimestamp, setDoc } from "firebase/firestore";
@@ -20,6 +20,7 @@ export default function SessionRoom({ params }) {
   const [remoteStreams, setRemoteStreams] = useState(new Map());
   const [isSpeakerOn, setIsSpeakerOn] = useState(true);
   const [showLeaveOptions, setShowLeaveOptions] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(false);
 
   const localVideoRef = useRef(null);
   const remoteVideoRefs = useRef(new Map());
@@ -524,9 +525,9 @@ export default function SessionRoom({ params }) {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-cyan-50 via-teal-50 to-sky-50">
+    <div className={`min-h-screen transition-colors duration-300 ${isDarkMode ? 'bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900' : 'bg-gradient-to-br from-cyan-50 via-teal-50 to-sky-50'}`}>
       {/* Modern Header with Glassmorphism */}
-      <div className="bg-white/95 backdrop-blur-xl px-6 py-5 border-b border-teal-100/50 shadow-lg sticky top-0 z-50">
+      <div className={`backdrop-blur-xl px-6 py-5 border-b shadow-lg sticky top-0 z-50 transition-colors duration-300 ${isDarkMode ? 'bg-gray-800/95 border-gray-700/50' : 'bg-white/95 border-teal-100/50'}`}>
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center space-x-4">
             <div className="bg-gradient-to-br from-teal-500 to-blue-600 p-3 rounded-2xl shadow-lg">
@@ -536,11 +537,11 @@ export default function SessionRoom({ params }) {
               <h1 className="text-xl font-bold bg-gradient-to-r from-teal-600 to-blue-600 bg-clip-text text-transparent">
                 {session.title}
               </h1>
-              <p className="text-gray-600 text-sm flex items-center space-x-2">
+              <p className={`text-sm flex items-center space-x-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
                 <span className="inline-flex items-center">
                   {session.sessionType === "voice" ? "🎤 Voice Call" : "💬 Text Chat"}
                 </span>
-                <span className="text-gray-400">•</span>
+                <span className={isDarkMode ? 'text-gray-500' : 'text-gray-400'}>•</span>
                 <span className="inline-flex items-center">
                   <Users className="w-4 h-4 mr-1" />
                   {participants.length} active
@@ -549,12 +550,22 @@ export default function SessionRoom({ params }) {
             </div>
           </div>
           <div className="flex items-center space-x-4">
-            <div className="bg-white px-4 py-2 rounded-xl shadow-sm border border-gray-200">
+            <div className={`px-4 py-2 rounded-xl shadow-sm border transition-colors ${isDarkMode ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-200'}`}>
               <div className="flex items-center space-x-2 text-sm">
                 <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                <span className="text-gray-700 font-medium">{participants.length}/{session.maxParticipants}</span>
+                <span className={`font-medium ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}>{participants.length}/{session.maxParticipants}</span>
               </div>
             </div>
+
+            {/* Theme Toggle */}
+            <button
+              onClick={() => setIsDarkMode(!isDarkMode)}
+              className={`p-3 rounded-xl shadow-lg transition-all duration-300 transform hover:-translate-y-0.5 ${isDarkMode ? 'bg-gray-700 hover:bg-gray-600 text-yellow-400' : 'bg-white hover:bg-gray-50 text-gray-700'}`}
+              title={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
+            >
+              {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+            </button>
+
             <div className="relative">
               <button
                 onClick={() => setShowLeaveOptions(!showLeaveOptions)}
@@ -564,14 +575,14 @@ export default function SessionRoom({ params }) {
               </button>
               
               {showLeaveOptions && (
-                <div className="absolute right-0 mt-2 w-56 bg-white rounded-2xl shadow-2xl border border-gray-200 z-50 overflow-hidden">
+                <div className={`absolute right-0 mt-2 w-56 rounded-2xl shadow-2xl border z-50 overflow-hidden transition-colors ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'}`}>
                   <div className="py-2">
                     <button
                       onClick={() => {
                         setShowLeaveOptions(false);
                         leaveSession(false);
                       }}
-                      className="w-full text-left px-5 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors flex items-center space-x-2"
+                      className={`w-full text-left px-5 py-3 text-sm transition-colors flex items-center space-x-2 ${isDarkMode ? 'text-gray-200 hover:bg-gray-700' : 'text-gray-700 hover:bg-gray-50'}`}
                     >
                       <PhoneOff className="w-4 h-4" />
                       <span>Leave for myself</span>
@@ -581,7 +592,7 @@ export default function SessionRoom({ params }) {
                         setShowLeaveOptions(false);
                         leaveSession(true);
                       }}
-                      className="w-full text-left px-5 py-3 text-sm text-red-600 hover:bg-red-50 transition-colors flex items-center space-x-2"
+                      className="w-full text-left px-5 py-3 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors flex items-center space-x-2"
                     >
                       <Phone className="w-4 h-4" />
                       <span>End session for all</span>

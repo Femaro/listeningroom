@@ -4,18 +4,30 @@ import { useState, useEffect } from "react";
 import { Loader, AlertCircle, Calendar, User, Clock, Play } from "lucide-react";
 import { db } from "@/utils/firebase";
 import { collection, query, where, onSnapshot } from "firebase/firestore";
+import useFirebaseAuth from "@/utils/useFirebaseAuth";
 
 export default function AvailableSessionsCard({ onBookSession }) {
+  const { userProfile } = useFirebaseAuth();
   const [sessions, setSessions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Set up real-time listener for public sessions
+    if (!userProfile?.location) {
+      setLoading(false);
+      return;
+    }
+
+    // Extract user's country from location
+    const locationParts = userProfile.location.split(",");
+    const userCountry = locationParts.length > 1 ? locationParts[locationParts.length - 1].trim() : locationParts[0].trim();
+
+    // Set up real-time listener for public sessions in user's country
     const q = query(
       collection(db, "sessions"),
       where("status", "==", "waiting"),
-      where("isPublic", "==", true)
+      where("isPublic", "==", true),
+      where("volunteerCountry", "==", userCountry) // Filter by country
     );
 
     const unsubscribe = onSnapshot(q, 
@@ -46,7 +58,7 @@ export default function AvailableSessionsCard({ onBookSession }) {
     );
 
     return () => unsubscribe();
-  }, []);
+  }, [userProfile]);
 
   const formatDate = (timestamp) => {
     if (!timestamp) return "Now";

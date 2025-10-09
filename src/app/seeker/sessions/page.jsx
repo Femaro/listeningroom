@@ -7,7 +7,7 @@ import { db } from "@/utils/firebase";
 import { collection, query, where, orderBy, onSnapshot, doc, updateDoc, arrayUnion, serverTimestamp } from "firebase/firestore";
 
 export default function BrowseSessions() {
-  const { user } = useFirebaseAuth();
+  const { user, userProfile } = useFirebaseAuth();
   const [sessions, setSessions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState({
@@ -19,13 +19,21 @@ export default function BrowseSessions() {
   const [joiningSession, setJoiningSession] = useState(null);
 
   useEffect(() => {
-    if (!user) return;
+    if (!user || !userProfile?.location) {
+      setLoading(false);
+      return;
+    }
 
-    // Set up real-time listener for sessions
+    // Extract user's country from location
+    const locationParts = userProfile.location.split(",");
+    const userCountry = locationParts.length > 1 ? locationParts[locationParts.length - 1].trim() : locationParts[0].trim();
+
+    // Set up real-time listener for sessions in user's country
     const q = query(
       collection(db, "sessions"),
       where("status", "==", "waiting"),
-      where("isPublic", "==", true)
+      where("isPublic", "==", true),
+      where("volunteerCountry", "==", userCountry) // Filter by country
     );
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
@@ -46,7 +54,7 @@ export default function BrowseSessions() {
     });
 
     return () => unsubscribe();
-  }, [user]);
+  }, [user, userProfile]);
 
   const filteredSessions = sessions.filter(session => {
     if (filters.sessionType !== "all" && session.sessionType !== filters.sessionType) return false;
