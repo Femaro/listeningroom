@@ -79,10 +79,10 @@ function MainComponent() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-teal-50 to-emerald-50">
-      {/* Navigation Header */}
-      <header className="bg-white/80 backdrop-blur-sm border-b border-white/20 sticky top-0 z-10">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <div className="w-full">
+      {/* Page-specific sub-header */}
+      <div className="bg-white/95 backdrop-blur-xl border-b border-teal-100/50 shadow-sm py-3">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between">
             <a
               href="/"

@@ -259,30 +259,18 @@ export default function BookSessionPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white shadow-sm border-b border-gray-200">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <a
-                href="/seeker/dashboard"
-                className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 transition-colors"
-              >
-                <ArrowLeft className="w-4 h-4" />
-                <span className="font-medium">Back to Dashboard</span>
-              </a>
-            </div>
-            <div className="flex items-center space-x-4">
-              <img
-                src="https://ucarecdn.com/e05f1122-ee17-479a-b4b8-456584592d00/-/format/auto/"
-                alt="Listening Room"
-                className="h-8 w-auto"
-              />
-            </div>
-          </div>
+    <div className="w-full">
+      <div className="bg-white/95 backdrop-blur-xl border-b border-teal-100/50 shadow-sm py-4">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <a
+            href="/seeker/dashboard"
+            className="flex items-center space-x-2 text-gray-600 hover:text-teal-600 transition-colors"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            <span className="font-medium">Back to Dashboard</span>
+          </a>
         </div>
-      </header>
+      </div>
 
       <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Page Header */}
@@ -295,7 +283,7 @@ export default function BookSessionPage() {
         </div>
 
         {/* Info Banner */}
-        <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-8">
+        <div className="bg-white/95 backdrop-blur-xl border border-teal-100/60 rounded-3xl p-6 mb-8 shadow-lg">
           <div className="flex items-start space-x-3">
             <Info className="w-5 h-5 text-blue-600 mt-0.5" />
             <div>

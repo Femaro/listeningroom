@@ -116,25 +116,25 @@ function MainComponent() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white shadow-sm border-b">
+    <div className="w-full">
+      {/* Page Header */}
+      <div className="bg-white/95 backdrop-blur-xl border-b border-teal-100/50 shadow-sm py-4">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-4">
+          <div className="flex justify-between items-center">
             <div className="flex items-center space-x-4">
               <a
                 href="/dashboard"
-                className="p-2 text-gray-600 hover:text-gray-900 rounded-lg hover:bg-gray-100"
+                className="p-2 text-gray-600 hover:text-teal-600 rounded-xl hover:bg-teal-50 transition-all"
               >
                 <ArrowLeft className="w-5 h-5" />
               </a>
               <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
-                  <Heart className="w-6 h-6 text-white" />
+                <div className="p-2 bg-gradient-to-br from-cyan-100 to-teal-100 rounded-xl">
+                  <Heart className="w-6 h-6 text-teal-600" />
                 </div>
                 <div>
-                  <h1 className="text-xl font-bold text-gray-900">
-                    ListeningRoom Analytics
+                  <h1 className="text-xl font-bold bg-gradient-to-r from-cyan-600 to-teal-600 bg-clip-text text-transparent">
+                    Analytics Dashboard
                   </h1>
                   <p className="text-sm text-gray-600">
                     Platform insights and metrics

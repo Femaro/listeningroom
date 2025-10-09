@@ -17,45 +17,56 @@ import {
 
 export default function VolunteerInfoPage() {
   return (
-    <div className="min-h-screen bg-white">
-      {/* Header */}
-      <header className="bg-gradient-to-r from-teal-600 to-emerald-600 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <div className="text-center">
-            <img
-              src="https://ucarecdn.com/e05f1122-ee17-479a-b4b8-456584592d00/-/format/auto/"
-              alt="Listening Room Logo"
-              className="w-48 h-24 mx-auto mb-6 object-contain filter brightness-0 invert"
-            />
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">
-              Become a Volunteer Listener
+    <div className="w-full">
+      {/* Hero Section */}
+      <section className="relative py-20 px-4 sm:px-6 lg:px-8 overflow-hidden">
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-0 left-1/4 w-96 h-96 bg-gradient-to-br from-cyan-200 to-teal-200 rounded-full opacity-30 blur-3xl"></div>
+          <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-gradient-to-br from-teal-200 to-emerald-200 rounded-full opacity-30 blur-3xl"></div>
+        </div>
+        
+        <div className="max-w-7xl mx-auto relative z-10">
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center space-x-2 bg-white/95 backdrop-blur-xl px-6 py-3 rounded-full shadow-lg border border-teal-100/60 mb-8">
+              <Heart className="w-5 h-5 text-teal-500" />
+              <span className="text-sm font-semibold bg-gradient-to-r from-cyan-600 to-teal-600 bg-clip-text text-transparent">
+                Make a Difference Today
+              </span>
+            </div>
+            
+            <h1 className="text-5xl md:text-6xl font-bold mb-6">
+              <span className="bg-gradient-to-r from-cyan-600 via-teal-600 to-emerald-600 bg-clip-text text-transparent">
+                Become a Volunteer
+              </span>
+              <br />
+              <span className="text-gray-800">Listener</span>
             </h1>
-            <p className="text-xl md:text-2xl mb-8 text-teal-100 max-w-3xl mx-auto">
-              Join our community of compassionate volunteers and make a
-              meaningful difference in people's lives through the power of
-              listening.
+            
+            <p className="text-xl text-gray-600 mb-10 max-w-3xl mx-auto">
+              Join our community of compassionate volunteers and make a meaningful difference through the power of listening.
             </p>
+            
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
                 href="/volunteer/application"
-                className="bg-white text-teal-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-50 transition-colors inline-flex items-center justify-center"
+                className="bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-600 hover:to-teal-600 text-white px-8 py-4 rounded-2xl font-bold shadow-xl hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300 inline-flex items-center justify-center"
               >
                 Apply to Volunteer
                 <ArrowRight className="w-5 h-5 ml-2" />
               </a>
               <a
                 href="/account/signin"
-                className="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-teal-600 transition-colors"
+                className="bg-white/95 backdrop-blur-xl border-2 border-teal-200 text-teal-700 px-8 py-4 rounded-2xl font-bold hover:border-teal-300 hover:bg-teal-50 transition-all duration-300 shadow-lg"
               >
                 Volunteer Sign In
               </a>
             </div>
           </div>
         </div>
-      </header>
+      </section>
 
       {/* Why Volunteer Section */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">

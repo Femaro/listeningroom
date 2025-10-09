@@ -258,31 +258,29 @@ export default function TrainingDashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white border-b border-gray-200">
+    <div className="w-full">
+      {/* Page Header */}
+      <div className="bg-white/95 backdrop-blur-xl border-b border-teal-100/50 shadow-sm py-4">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-4">
+          <div className="flex justify-between items-center">
             <div className="flex items-center space-x-3">
-              <img
-                src="https://ucarecdn.com/dc54868d-20c4-46fa-b583-6f27b18e95b5/-/format/auto/"
-                alt="ListeningRoom"
-                className="h-10 object-contain"
-              />
+              <div className="p-2 bg-gradient-to-br from-cyan-100 to-teal-100 rounded-xl">
+                <BookOpen className="w-6 h-6 text-teal-600" />
+              </div>
               <div>
-                <h1 className="text-xl font-semibold text-gray-900">Volunteer Training</h1>
-                <p className="text-gray-600">Complete your training to start helping others</p>
+                <h1 className="text-xl font-bold bg-gradient-to-r from-cyan-600 to-teal-600 bg-clip-text text-transparent">Volunteer Training</h1>
+                <p className="text-sm text-gray-600">Complete your training to start helping others</p>
               </div>
             </div>
             <a
               href="/volunteer/dashboard"
-              className="text-gray-600 hover:text-teal-600 transition-colors"
+              className="text-gray-600 hover:text-teal-600 transition-colors font-medium"
             >
               Back to Dashboard
             </a>
           </div>
         </div>
-      </header>
+      </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Progress Overview */}
