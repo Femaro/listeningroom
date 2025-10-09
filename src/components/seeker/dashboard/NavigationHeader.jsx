@@ -24,7 +24,7 @@ export default function NavigationHeader({ user, onHelpClick }) {
     return (
         <>
             {/* Dashboard Sub-Navigation */}
-            <div className="bg-white/95 backdrop-blur-xl border-b border-teal-100/50 shadow-sm">
+            <div className="bg-white/95 backdrop-blur-xl border-b border-teal-100/50 shadow-sm sticky top-0 z-50">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex items-center justify-between h-14">
                         {/* Dashboard Title */}
@@ -90,7 +90,7 @@ export default function NavigationHeader({ user, onHelpClick }) {
                                 </button>
 
                                 {showUserMenu && (
-                                    <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-50">
+                                    <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-[100]">
                                         <div className="px-4 py-2 border-b border-gray-100">
                                             <p className="text-sm text-gray-900 font-medium">
                                                 {user?.name}
@@ -133,7 +133,7 @@ export default function NavigationHeader({ user, onHelpClick }) {
 
             {/* Mobile Menu Overlay */}
             {showMobileMenu && (
-                <div className="fixed inset-0 z-50 md:hidden">
+                <div className="fixed inset-0 z-[100] md:hidden">
                     <div
                         className="fixed inset-0 bg-black bg-opacity-50"
                         onClick={() => setShowMobileMenu(false)}
