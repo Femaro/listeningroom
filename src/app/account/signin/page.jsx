@@ -124,7 +124,7 @@ function MainComponent() {
             </nav>
           </div>
         </div>
-      </header>
+      </div>
 
       <div className="flex items-center justify-center p-4 min-h-[calc(100vh-80px)]">
         <div className="w-full max-w-md">
