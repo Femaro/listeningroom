@@ -25,7 +25,7 @@ export default function IPhone16ProMaxOptimizer({ children }) {
 
   if (isIPhone) {
     return (
-      <div className="iphone-optimized min-h-screen bg-gradient-to-br from-teal-50 via-blue-50 to-emerald-50">
+      <div className="iphone-optimized min-h-screen bg-gradient-to-br from-cyan-50 via-teal-50 to-sky-50">
         <style jsx global>{`
           :root {
             /* Use standard iOS safe area variables */
@@ -63,7 +63,7 @@ export default function IPhone16ProMaxOptimizer({ children }) {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-teal-50 via-blue-50 to-emerald-50">
+    <div className="min-h-screen bg-gradient-to-br from-cyan-50 via-teal-50 to-sky-50">
       <Header />
       <main className="min-h-[calc(100vh-160px)]">
         {children}

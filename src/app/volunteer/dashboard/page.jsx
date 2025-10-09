@@ -63,7 +63,7 @@ export default function VolunteerDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="w-full">
       <NavigationHeader
         user={user}
         onSettingsClick={() => setShowSettings(true)}
@@ -75,7 +75,7 @@ export default function VolunteerDashboard() {
           <div className="lg:col-span-2 space-y-6">
             <WelcomeCard user={user} isFirstTime={isFirstTime} />
 
-            <div className="bg-white rounded-2xl shadow-lg border border-gray-200">
+            <div className="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl border border-teal-100/60">
               <div className="border-b border-gray-200">
                 <nav className="flex space-x-8 px-6">
                   <button

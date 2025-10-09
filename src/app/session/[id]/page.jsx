@@ -524,9 +524,9 @@ export default function SessionRoom({ params }) {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-teal-50 via-blue-50 to-emerald-50">
+    <div className="min-h-screen bg-gradient-to-br from-cyan-50 via-teal-50 to-sky-50">
       {/* Modern Header with Glassmorphism */}
-      <div className="bg-white/80 backdrop-blur-md px-6 py-5 border-b border-white/20 shadow-sm sticky top-0 z-50">
+      <div className="bg-white/95 backdrop-blur-xl px-6 py-5 border-b border-teal-100/50 shadow-lg sticky top-0 z-50">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center space-x-4">
             <div className="bg-gradient-to-br from-teal-500 to-blue-600 p-3 rounded-2xl shadow-lg">
@@ -608,7 +608,7 @@ export default function SessionRoom({ params }) {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl w-full z-10">
                 {/* Local Video/Audio */}
-                <div className="bg-white/90 backdrop-blur-lg rounded-3xl p-6 shadow-2xl border border-white/50 transform transition-all duration-300 hover:shadow-3xl">
+                <div className="bg-white/95 backdrop-blur-xl rounded-3xl p-6 shadow-2xl border border-teal-100/60 transform transition-all duration-300 hover:shadow-3xl hover:border-teal-200">
                   <div className="aspect-video bg-gradient-to-br from-teal-100 to-blue-100 rounded-2xl mb-4 flex items-center justify-center relative overflow-hidden">
                     {/* Decorative background pattern */}
                     <div className="absolute inset-0 opacity-10">
