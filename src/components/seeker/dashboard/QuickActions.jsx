@@ -17,14 +17,14 @@ export default function QuickActions() {
       description: "Join live voice or chat sessions with volunteers",
       icon: MessageCircle,
       href: "/seeker/sessions",
-      color: "blue",
+      color: "teal",
     },
     {
       title: "Book a Session",
       description: "Schedule time with a specific volunteer",
       icon: Calendar,
       href: "/sessions/book",
-      color: "purple",
+      color: "cyan",
     },
     {
       title: "My Sessions",
@@ -43,9 +43,11 @@ export default function QuickActions() {
   ];
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-      <h3 className="text-lg font-semibold text-gray-900 mb-4">
-        Quick Actions
+    <div className="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl border border-teal-100/60 p-6">
+      <h3 className="text-xl font-bold mb-4">
+        <span className="bg-gradient-to-r from-cyan-600 to-teal-600 bg-clip-text text-transparent">
+          Quick Actions
+        </span>
       </h3>
       <div className="space-y-3">
         {actions.map((action) => {
@@ -55,8 +57,8 @@ export default function QuickActions() {
             gray: "bg-gray-50 text-gray-700 hover:bg-gray-100 border-gray-200",
             green:
               "bg-green-50 text-green-700 hover:bg-green-100 border-green-200",
-            blue: "bg-blue-50 text-blue-700 hover:bg-blue-100 border-blue-200",
-            purple: "bg-purple-50 text-purple-700 hover:bg-purple-100 border-purple-200",
+            teal: "bg-teal-50 text-teal-700 hover:bg-teal-100 border-teal-200",
+            cyan: "bg-cyan-50 text-cyan-700 hover:bg-cyan-100 border-cyan-200",
           };
 
           return (

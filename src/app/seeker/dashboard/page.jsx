@@ -96,25 +96,50 @@ export default function SeekerDashboard() {
           {/* Sidebar */}
           <div className="space-y-6">
             <QuickActions />
-            <div className="bg-white/10 backdrop-blur-md rounded-2xl shadow-xl border border-white/20 p-6">
-              <h3 className="text-xl font-semibold text-white mb-4">
-                Need Help?
+            <div className="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl border border-teal-100/60 p-8 relative overflow-hidden">
+              {/* Decorative gradient background */}
+              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-cyan-400 to-teal-400 rounded-full opacity-10 blur-3xl"></div>
+              
+              <h3 className="text-2xl font-bold text-gray-800 mb-4 relative z-10 flex items-center space-x-2">
+                <AlertCircle className="w-6 h-6 text-teal-600" />
+                <span className="bg-gradient-to-r from-cyan-600 to-teal-600 bg-clip-text text-transparent">
+                  Need Help?
+                </span>
               </h3>
-              <div className="space-y-4 text-sm text-gray-300">
-                <p className="text-lg">
+              
+              <div className="space-y-4 relative z-10">
+                <p className="text-gray-700 text-base leading-relaxed">
                   Our platform is here to provide emotional support and someone
                   to listen.
                 </p>
-                <div className="bg-gradient-to-r from-teal-600/90 to-blue-600/90 border border-teal-500 rounded-xl p-4">
-                  <p className="text-white font-semibold text-sm">
-                    🔒 100% confidential • 💝 First 5 minutes free • 🌍
-                    Available 24/7
+                
+                <div className="bg-gradient-to-r from-cyan-500 to-teal-500 rounded-2xl p-5 shadow-lg">
+                  <div className="space-y-2 text-white">
+                    <div className="flex items-center space-x-2">
+                      <span className="text-2xl">🔒</span>
+                      <span className="font-semibold text-sm">100% Confidential</span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <span className="text-2xl">💝</span>
+                      <span className="font-semibold text-sm">First 5 Minutes Free</span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <span className="text-2xl">🌍</span>
+                      <span className="font-semibold text-sm">Available 24/7 Worldwide</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="bg-teal-50 border-l-4 border-teal-500 rounded-lg p-4">
+                  <p className="text-teal-800 text-sm font-medium">
+                    <span className="font-bold">Remember:</span> We provide peer support, not professional therapy. For emergencies, please contact crisis resources.
                   </p>
                 </div>
               </div>
+              
               <button
                 onClick={() => setShowHelp(true)}
-                className="w-full mt-6 bg-gradient-to-r from-teal-600 to-blue-600 text-white px-6 py-3 rounded-xl font-semibold hover:from-teal-700 hover:to-blue-700 transition-all duration-300 transform hover:scale-105 shadow-lg"
+                className="w-full mt-6 bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-600 hover:to-teal-600 text-white px-6 py-4 rounded-2xl font-bold transition-all duration-300 transform hover:-translate-y-1 shadow-xl hover:shadow-2xl relative z-10"
               >
                 Learn How It Works
               </button>

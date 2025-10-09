@@ -19,6 +19,11 @@ export default function IPhone16ProMaxOptimizer({ children }) {
   const noLayoutPages = [
     '/session/', // Session rooms are full-screen
     '/admin/login', // Admin login should be standalone
+    '/dashboard', // All dashboard pages (seeker, volunteer, admin, training)
+    '/seeker/dashboard',
+    '/volunteer/dashboard',
+    '/admin/dashboard',
+    '/training/dashboard',
   ];
   
   const shouldHideLayout = noLayoutPages.some(path => location.pathname.includes(path));
