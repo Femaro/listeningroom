@@ -2,7 +2,6 @@
 
 import useHomePage from "@/hooks/useHomePage";
 import LoadingScreen from "@/components/landing/LoadingScreen";
-import Header from "@/components/landing/Header";
 import GlobalAccessibilityBanner from "@/components/landing/GlobalAccessibilityBanner";
 import HeroSection from "@/components/landing/HeroSection";
 import InspirationalSlides from "@/components/landing/InspirationalSlides";
@@ -10,7 +9,6 @@ import GlobalFeatures from "@/components/landing/GlobalFeatures";
 import WhyChooseUs from "@/components/landing/WhyChooseUs";
 import ImpactStats from "@/components/landing/ImpactStats";
 import CrisisNotice from "@/components/landing/CrisisNotice";
-import Footer from "@/components/landing/Footer";
 
 export const metadata = {
   title: "Listening Room - Global Mental Health Support & Crisis Chat 24/7",
@@ -47,8 +45,7 @@ export default function Homepage() {
   }
 
   return (
-    <div className="min-h-screen bg-white">
-      <Header />
+    <div className="w-full">
       <GlobalAccessibilityBanner />
       <HeroSection
         selectedLocation={selectedLocation}
@@ -63,7 +60,6 @@ export default function Homepage() {
       <WhyChooseUs />
       <ImpactStats />
       <CrisisNotice />
-      <Footer />
     </div>
   );
 }

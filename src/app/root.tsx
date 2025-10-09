@@ -6,6 +6,7 @@ import {
   ScrollRestoration,
   useAsyncError,
   useRouteError,
+  useLocation,
 } from 'react-router';
 
 import {
@@ -19,6 +20,10 @@ import { Toaster } from 'sonner';
 // @ts-ignore
 import { LoadFonts } from 'virtual:load-fonts.jsx';
 import '@/utils/firebase';
+// @ts-ignore
+import Header from '@/components/landing/Header';
+// @ts-ignore
+import Footer from '@/components/landing/Footer';
 
 export const links = () => [];
 
@@ -110,7 +115,29 @@ export function Layout({ children }: { children: ReactNode }) {
 }
 
 export default function App() {
-  return <Outlet />;
+  const location = useLocation();
+  
+  // Pages that should not have header/footer (full-screen experiences)
+  const noLayoutPages = [
+    '/session/', // Session rooms are full-screen
+    '/admin/login', // Admin login should be standalone
+  ];
+  
+  const shouldHideLayout = noLayoutPages.some(path => location.pathname.includes(path));
+  
+  if (shouldHideLayout) {
+    return <Outlet />;
+  }
+  
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-teal-50 via-blue-50 to-emerald-50">
+      <Header />
+      <main className="min-h-[calc(100vh-160px)]">
+        <Outlet />
+      </main>
+      <Footer />
+    </div>
+  );
 }
 
 export function HydrateFallback() {
