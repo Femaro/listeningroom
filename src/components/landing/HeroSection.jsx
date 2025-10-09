@@ -106,34 +106,48 @@ export default function HeroSection({
               </div>
             </div>
 
-            {/* Live Stats */}
+            {/* Live Stats - Real-time volunteer availability */}
             <div className="mt-8 grid grid-cols-3 gap-4">
               {liveStats.loading ? (
                 <div className="col-span-3 text-center py-6">
                   <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-teal-600 mx-auto"></div>
+                  <p className="text-xs text-gray-500 mt-2">Loading live data...</p>
                 </div>
               ) : (
                 <>
-                  <div className="text-center p-4 bg-gradient-to-br from-cyan-50 to-teal-50 rounded-2xl border border-teal-100">
-                    <div className="text-3xl font-bold bg-gradient-to-r from-cyan-600 to-teal-600 bg-clip-text text-transparent">
-                      {liveStats.availableVolunteers}
+                  <div className="relative group">
+                    <div className="text-center p-4 bg-gradient-to-br from-cyan-50 to-teal-50 rounded-2xl border border-teal-100 hover:border-teal-200 transition-all">
+                      <div className="flex items-center justify-center mb-1">
+                        <div className={`w-2 h-2 rounded-full mr-2 ${(liveStats.availableVolunteers || 0) > 0 ? 'bg-green-500 animate-pulse' : 'bg-gray-400'}`}></div>
+                        <div className="text-3xl font-bold bg-gradient-to-r from-cyan-600 to-teal-600 bg-clip-text text-transparent">
+                          {liveStats.availableVolunteers || 0}
+                        </div>
+                      </div>
+                      <div className="text-xs text-gray-600">Available Now</div>
                     </div>
-                    <div className="text-xs text-gray-600 mt-1">Available Now</div>
                   </div>
                   <div className="text-center p-4 bg-gradient-to-br from-teal-50 to-emerald-50 rounded-2xl border border-teal-100">
                     <div className="text-3xl font-bold bg-gradient-to-r from-teal-600 to-emerald-600 bg-clip-text text-transparent">
-                      {liveStats.onlineVolunteers}
+                      {liveStats.onlineVolunteers || 0}
                     </div>
                     <div className="text-xs text-gray-600 mt-1">Online</div>
                   </div>
                   <div className="text-center p-4 bg-gradient-to-br from-sky-50 to-cyan-50 rounded-2xl border border-teal-100">
                     <div className="text-3xl font-bold bg-gradient-to-r from-sky-600 to-cyan-600 bg-clip-text text-transparent">
-                      {liveStats.availableSessions}
+                      {liveStats.availableSessions || 0}
                     </div>
                     <div className="text-xs text-gray-600 mt-1">Sessions</div>
                   </div>
                 </>
               )}
+            </div>
+            
+            {/* Auto-refresh indicator */}
+            <div className="mt-4 text-center">
+              <p className="text-xs text-gray-500 flex items-center justify-center space-x-1">
+                <span className="w-1.5 h-1.5 bg-teal-500 rounded-full animate-pulse"></span>
+                <span>Live data • Auto-refreshes every 30s</span>
+              </p>
             </div>
           </div>
         </div>
