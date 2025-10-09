@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { Mic, MicOff, Phone, PhoneOff, MessageCircle, Users, Settings, Volume2, VolumeX } from "lucide-react";
+import { Mic, MicOff, Phone, PhoneOff, MessageCircle, Users, Settings, Volume2, VolumeX, Shield } from "lucide-react";
 import useFirebaseAuth from "@/utils/useFirebaseAuth";
 import { db } from "@/utils/firebase";
 import { doc, onSnapshot, updateDoc, arrayUnion, arrayRemove, serverTimestamp, setDoc } from "firebase/firestore";
@@ -462,10 +462,18 @@ export default function SessionRoom({ params }) {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-teal-50 via-blue-50 to-emerald-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"></div>
-          <p className="text-white">Joining session...</p>
+          <div className="relative">
+            <div className="w-20 h-20 bg-gradient-to-br from-teal-500 to-blue-600 rounded-full mx-auto mb-6 animate-pulse shadow-2xl"></div>
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="animate-spin rounded-full h-24 w-24 border-4 border-transparent border-t-teal-500 border-r-blue-600"></div>
+            </div>
+          </div>
+          <h2 className="text-xl font-bold bg-gradient-to-r from-teal-600 to-blue-600 bg-clip-text text-transparent mb-2">
+            Joining session...
+          </h2>
+          <p className="text-gray-600">Please wait a moment</p>
         </div>
       </div>
     );
@@ -473,16 +481,21 @@ export default function SessionRoom({ params }) {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-white mb-4">Error</h1>
-          <p className="text-gray-300 mb-6">{error}</p>
-          <button
-            onClick={() => window.history.back()}
-            className="bg-teal-600 text-white px-6 py-3 rounded-lg hover:bg-teal-700"
-          >
-            Go Back
-          </button>
+      <div className="min-h-screen bg-gradient-to-br from-teal-50 via-blue-50 to-emerald-50 flex items-center justify-center p-6">
+        <div className="text-center max-w-md">
+          <div className="bg-white/90 backdrop-blur-lg rounded-3xl p-8 shadow-2xl border border-white/50">
+            <div className="w-20 h-20 bg-gradient-to-br from-red-100 to-rose-100 rounded-full flex items-center justify-center mx-auto mb-6">
+              <PhoneOff className="w-10 h-10 text-red-600" />
+            </div>
+            <h1 className="text-2xl font-bold text-gray-800 mb-3">Oops! Something went wrong</h1>
+            <p className="text-gray-600 mb-8">{error}</p>
+            <button
+              onClick={() => window.history.back()}
+              className="bg-gradient-to-r from-teal-500 to-blue-600 hover:from-teal-600 hover:to-blue-700 text-white px-8 py-3 rounded-2xl font-semibold transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+            >
+              Go Back
+            </button>
+          </div>
         </div>
       </div>
     );
@@ -490,65 +503,88 @@ export default function SessionRoom({ params }) {
 
   if (!session) {
     return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-white mb-4">Session Not Found</h1>
-          <p className="text-gray-300 mb-6">This session may have ended or doesn't exist.</p>
-          <button
-            onClick={() => window.history.back()}
-            className="bg-teal-600 text-white px-6 py-3 rounded-lg hover:bg-teal-700"
-          >
-            Go Back
-          </button>
+      <div className="min-h-screen bg-gradient-to-br from-teal-50 via-blue-50 to-emerald-50 flex items-center justify-center p-6">
+        <div className="text-center max-w-md">
+          <div className="bg-white/90 backdrop-blur-lg rounded-3xl p-8 shadow-2xl border border-white/50">
+            <div className="w-20 h-20 bg-gradient-to-br from-gray-100 to-gray-200 rounded-full flex items-center justify-center mx-auto mb-6">
+              <MessageCircle className="w-10 h-10 text-gray-600" />
+            </div>
+            <h1 className="text-2xl font-bold text-gray-800 mb-3">Session Not Found</h1>
+            <p className="text-gray-600 mb-8">This session may have ended or doesn't exist.</p>
+            <button
+              onClick={() => window.history.back()}
+              className="bg-gradient-to-r from-teal-500 to-blue-600 hover:from-teal-600 hover:to-blue-700 text-white px-8 py-3 rounded-2xl font-semibold transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+            >
+              Go Back
+            </button>
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white">
-      {/* Header */}
-      <div className="bg-gray-800 px-6 py-4 border-b border-gray-700">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-xl font-semibold">{session.title}</h1>
-            <p className="text-gray-400 text-sm">
-              {session.sessionType === "voice" ? "Voice Call" : "Text Chat"} • {participants.length} participants
-            </p>
+    <div className="min-h-screen bg-gradient-to-br from-teal-50 via-blue-50 to-emerald-50">
+      {/* Modern Header with Glassmorphism */}
+      <div className="bg-white/80 backdrop-blur-md px-6 py-5 border-b border-white/20 shadow-sm sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto flex items-center justify-between">
+          <div className="flex items-center space-x-4">
+            <div className="bg-gradient-to-br from-teal-500 to-blue-600 p-3 rounded-2xl shadow-lg">
+              <MessageCircle className="w-6 h-6 text-white" />
+            </div>
+            <div>
+              <h1 className="text-xl font-bold bg-gradient-to-r from-teal-600 to-blue-600 bg-clip-text text-transparent">
+                {session.title}
+              </h1>
+              <p className="text-gray-600 text-sm flex items-center space-x-2">
+                <span className="inline-flex items-center">
+                  {session.sessionType === "voice" ? "🎤 Voice Call" : "💬 Text Chat"}
+                </span>
+                <span className="text-gray-400">•</span>
+                <span className="inline-flex items-center">
+                  <Users className="w-4 h-4 mr-1" />
+                  {participants.length} active
+                </span>
+              </p>
+            </div>
           </div>
           <div className="flex items-center space-x-4">
-            <div className="flex items-center space-x-2">
-              <Users className="w-5 h-5 text-gray-400" />
-              <span className="text-sm">{participants.length}/{session.maxParticipants}</span>
+            <div className="bg-white px-4 py-2 rounded-xl shadow-sm border border-gray-200">
+              <div className="flex items-center space-x-2 text-sm">
+                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                <span className="text-gray-700 font-medium">{participants.length}/{session.maxParticipants}</span>
+              </div>
             </div>
             <div className="relative">
               <button
                 onClick={() => setShowLeaveOptions(!showLeaveOptions)}
-                className="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-lg transition-colors"
+                className="bg-gradient-to-r from-red-500 to-rose-600 hover:from-red-600 hover:to-rose-700 text-white px-6 py-2.5 rounded-xl font-medium transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
               >
                 Leave Session
               </button>
               
               {showLeaveOptions && (
-                <div className="absolute right-0 mt-2 w-48 bg-gray-800 rounded-lg shadow-lg border border-gray-700 z-50">
+                <div className="absolute right-0 mt-2 w-56 bg-white rounded-2xl shadow-2xl border border-gray-200 z-50 overflow-hidden">
                   <div className="py-2">
                     <button
                       onClick={() => {
                         setShowLeaveOptions(false);
                         leaveSession(false);
                       }}
-                      className="w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-gray-700"
+                      className="w-full text-left px-5 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors flex items-center space-x-2"
                     >
-                      Leave for myself
+                      <PhoneOff className="w-4 h-4" />
+                      <span>Leave for myself</span>
                     </button>
                     <button
                       onClick={() => {
                         setShowLeaveOptions(false);
                         leaveSession(true);
                       }}
-                      className="w-full text-left px-4 py-2 text-sm text-red-400 hover:bg-gray-700"
+                      className="w-full text-left px-5 py-3 text-sm text-red-600 hover:bg-red-50 transition-colors flex items-center space-x-2"
                     >
-                      End session for all
+                      <Phone className="w-4 h-4" />
+                      <span>End session for all</span>
                     </button>
                   </div>
                 </div>
@@ -558,45 +594,74 @@ export default function SessionRoom({ params }) {
         </div>
       </div>
 
-      <div className="flex h-[calc(100vh-80px)]">
+      <div className="flex h-[calc(100vh-88px)]">
       {/* Main Content */}
-        <div className="flex-1 flex flex-col">
+        <div className="flex-1 flex flex-col bg-transparent">
           {session.sessionType === "voice" ? (
             /* Voice Call Interface */
-            <div className="flex-1 flex items-center justify-center p-8">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl w-full">
+            <div className="flex-1 flex items-center justify-center p-8 relative overflow-hidden">
+              {/* Background decorative elements */}
+              <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                <div className="absolute -top-24 -left-24 w-96 h-96 bg-gradient-to-br from-teal-200 to-blue-200 rounded-full opacity-20 blur-3xl"></div>
+                <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-gradient-to-br from-emerald-200 to-teal-200 rounded-full opacity-20 blur-3xl"></div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl w-full z-10">
                 {/* Local Video/Audio */}
-                <div className="bg-gray-800 rounded-lg p-4">
-                  <div className="aspect-video bg-gray-700 rounded-lg mb-4 flex items-center justify-center">
-                    <div className="text-center">
-                      <div className="w-16 h-16 bg-teal-600 rounded-full flex items-center justify-center mx-auto mb-2">
-                        <span className="text-2xl font-bold">
+                <div className="bg-white/90 backdrop-blur-lg rounded-3xl p-6 shadow-2xl border border-white/50 transform transition-all duration-300 hover:shadow-3xl">
+                  <div className="aspect-video bg-gradient-to-br from-teal-100 to-blue-100 rounded-2xl mb-4 flex items-center justify-center relative overflow-hidden">
+                    {/* Decorative background pattern */}
+                    <div className="absolute inset-0 opacity-10">
+                      <img 
+                        src="https://images.unsplash.com/photo-1516302752625-fcc3c50ae61f?w=500&h=300&fit=crop" 
+                        alt="" 
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <div className="text-center z-10">
+                      <div className="w-24 h-24 bg-gradient-to-br from-teal-500 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-3 shadow-xl ring-4 ring-white/50">
+                        <span className="text-3xl font-bold text-white">
                           {(user?.displayName || "You")[0].toUpperCase()}
                         </span>
                       </div>
-                      <p className="text-sm text-gray-400">You</p>
+                      <p className="text-sm font-semibold text-gray-700 bg-white/80 px-4 py-1 rounded-full">You</p>
                     </div>
-              </div>
-                  <audio ref={localVideoRef} autoPlay muted />
-                  <div className="mt-2 text-xs text-gray-400">
-                    <div>Local Audio: {localStream ? "Connected" : "Not connected"}</div>
-                    <div>Muted: {isMuted ? "Yes" : "No"}</div>
                   </div>
-          </div>
+                  <audio ref={localVideoRef} autoPlay muted />
+                  <div className="flex items-center justify-between mt-4 px-2">
+                    <div className="flex items-center space-x-2">
+                      <div className={`w-2 h-2 rounded-full ${localStream ? 'bg-green-500' : 'bg-red-500'} animate-pulse`}></div>
+                      <span className="text-xs font-medium text-gray-600">
+                        {localStream ? "Connected" : "Not connected"}
+                      </span>
+                    </div>
+                    <div className={`px-3 py-1 rounded-full text-xs font-medium ${isMuted ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'}`}>
+                      {isMuted ? "Muted" : "Active"}
+                    </div>
+                  </div>
+                </div>
 
                 {/* Remote Participants */}
                 {participants.filter(p => p.userId !== user.uid).map((participant, index) => (
-                  <div key={participant.userId} className="bg-gray-800 rounded-lg p-4">
-                    <div className="aspect-video bg-gray-700 rounded-lg mb-4 flex items-center justify-center">
-                      <div className="text-center">
-                        <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-2">
-                          <span className="text-2xl font-bold">
+                  <div key={participant.userId} className="bg-white/90 backdrop-blur-lg rounded-3xl p-6 shadow-2xl border border-white/50 transform transition-all duration-300 hover:shadow-3xl">
+                    <div className="aspect-video bg-gradient-to-br from-blue-100 to-purple-100 rounded-2xl mb-4 flex items-center justify-center relative overflow-hidden">
+                      {/* Decorative background pattern */}
+                      <div className="absolute inset-0 opacity-10">
+                        <img 
+                          src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=500&h=300&fit=crop" 
+                          alt="" 
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                      <div className="text-center z-10">
+                        <div className="w-24 h-24 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-3 shadow-xl ring-4 ring-white/50">
+                          <span className="text-3xl font-bold text-white">
                             {participant.userName[0].toUpperCase()}
                           </span>
                         </div>
-                        <p className="text-sm text-gray-400">{participant.userName}</p>
-            </div>
-          </div>
+                        <p className="text-sm font-semibold text-gray-700 bg-white/80 px-4 py-1 rounded-full">{participant.userName}</p>
+                      </div>
+                    </div>
                     <audio 
                       ref={el => {
                         if (el) remoteVideoRefs.current.set(participant.userId, el);
@@ -604,9 +669,16 @@ export default function SessionRoom({ params }) {
                       autoPlay 
                       volume={isSpeakerOn ? 1 : 0}
                     />
-                    <div className="mt-2 text-xs text-gray-400">
-                      <div>Remote Audio: {remoteStreams.has(participant.userId) ? "Connected" : "Not connected"}</div>
-                      <div>Speaker: {isSpeakerOn ? "ON" : "OFF"}</div>
+                    <div className="flex items-center justify-between mt-4 px-2">
+                      <div className="flex items-center space-x-2">
+                        <div className={`w-2 h-2 rounded-full ${remoteStreams.has(participant.userId) ? 'bg-green-500' : 'bg-orange-500'} animate-pulse`}></div>
+                        <span className="text-xs font-medium text-gray-600">
+                          {remoteStreams.has(participant.userId) ? "Connected" : "Connecting..."}
+                        </span>
+                      </div>
+                      <div className={`px-3 py-1 rounded-full text-xs font-medium ${isSpeakerOn ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-700'}`}>
+                        {isSpeakerOn ? "Speaker ON" : "Speaker OFF"}
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -614,118 +686,196 @@ export default function SessionRoom({ params }) {
             </div>
           ) : (
             /* Chat Interface */
-            <div className="flex-1 flex flex-col">
+            <div className="flex-1 flex flex-col relative">
+              {/* Background decorative elements */}
+              <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                <div className="absolute top-0 left-1/4 w-64 h-64 bg-gradient-to-br from-teal-200 to-blue-200 rounded-full opacity-10 blur-3xl"></div>
+                <div className="absolute bottom-0 right-1/4 w-64 h-64 bg-gradient-to-br from-emerald-200 to-teal-200 rounded-full opacity-10 blur-3xl"></div>
+              </div>
+
               {/* Messages */}
-              <div className="flex-1 p-6 overflow-y-auto">
-                <div className="space-y-4">
+              <div className="flex-1 p-8 overflow-y-auto z-10">
+                <div className="max-w-4xl mx-auto space-y-6">
+                  {session.messages?.length === 0 && (
+                    <div className="text-center py-12">
+                      <div className="w-20 h-20 bg-gradient-to-br from-teal-100 to-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <MessageCircle className="w-10 h-10 text-teal-600" />
+                      </div>
+                      <h3 className="text-xl font-semibold text-gray-800 mb-2">Start the conversation</h3>
+                      <p className="text-gray-600">Send a message to begin your session</p>
+                    </div>
+                  )}
                   {session.messages?.map((message) => (
-                    <div key={message.id} className={`flex ${message.userId === user.uid ? 'justify-end' : 'justify-start'}`}>
-                      <div className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${
-                        message.userId === user.uid 
-                          ? 'bg-teal-600 text-white' 
-                          : 'bg-gray-700 text-gray-100'
-                      }`}>
-                        <p className="text-sm font-medium">{message.userName}</p>
-                        <p className="text-sm">{message.message}</p>
-                      <p className="text-xs opacity-75 mt-1">
-                          {new Date(message.timestamp?.toDate?.() || message.timestamp).toLocaleTimeString()}
-                      </p>
+                    <div key={message.id} className={`flex ${message.userId === user.uid ? 'justify-end' : 'justify-start'} animate-fadeIn`}>
+                      <div className={`max-w-md lg:max-w-lg group ${message.userId === user.uid ? 'items-end' : 'items-start'}`}>
+                        <div className="flex items-center space-x-2 mb-1 px-1">
+                          <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold ${
+                            message.userId === user.uid 
+                              ? 'bg-gradient-to-br from-teal-500 to-blue-600 text-white' 
+                              : 'bg-gradient-to-br from-purple-500 to-pink-600 text-white'
+                          }`}>
+                            {message.userName[0].toUpperCase()}
+                          </div>
+                          <p className="text-xs font-semibold text-gray-700">{message.userName}</p>
+                        </div>
+                        <div className={`px-5 py-3 rounded-2xl shadow-lg backdrop-blur-sm transform transition-all duration-200 hover:scale-[1.02] ${
+                          message.userId === user.uid 
+                            ? 'bg-gradient-to-br from-teal-500 to-blue-600 text-white rounded-tr-sm' 
+                            : 'bg-white/90 text-gray-800 border border-gray-200 rounded-tl-sm'
+                        }`}>
+                          <p className="text-sm leading-relaxed">{message.message}</p>
+                          <p className={`text-xs mt-2 ${
+                            message.userId === user.uid ? 'text-teal-100' : 'text-gray-500'
+                          }`}>
+                            {new Date(message.timestamp?.toDate?.() || message.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                          </p>
+                        </div>
                       </div>
                     </div>
                   ))}
-                  </div>
-            </div>
+                </div>
+              </div>
             
               {/* Message Input */}
-              <div className="border-t border-gray-700 p-4">
-                <form onSubmit={sendMessage} className="flex space-x-4">
-                <input
-                  type="text"
-                    value={newMessage}
-                    onChange={(e) => setNewMessage(e.target.value)}
-                  placeholder="Type a message..."
-                    className="flex-1 bg-gray-700 text-white px-4 py-2 rounded-lg focus:ring-2 focus:ring-teal-500 focus:outline-none"
-                />
-                <button
-                  type="submit"
-                    className="bg-teal-600 hover:bg-teal-700 px-6 py-2 rounded-lg transition-colors"
-                >
-                    Send
-                </button>
-                </form>
+              <div className="bg-white/80 backdrop-blur-md border-t border-white/50 p-6 z-10">
+                <div className="max-w-4xl mx-auto">
+                  <form onSubmit={sendMessage} className="flex space-x-4">
+                    <div className="flex-1 relative">
+                      <input
+                        type="text"
+                        value={newMessage}
+                        onChange={(e) => setNewMessage(e.target.value)}
+                        placeholder="Type your message..."
+                        className="w-full bg-white border-2 border-gray-200 text-gray-900 px-6 py-4 rounded-2xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 focus:outline-none transition-all duration-200 placeholder-gray-400"
+                      />
+                    </div>
+                    <button
+                      type="submit"
+                      className="bg-gradient-to-r from-teal-500 to-blue-600 hover:from-teal-600 hover:to-blue-700 text-white px-8 py-4 rounded-2xl font-semibold transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 flex items-center space-x-2"
+                    >
+                      <span>Send</span>
+                      <MessageCircle className="w-5 h-5" />
+                    </button>
+                  </form>
+                </div>
               </div>
           </div>
         )}
 
       {/* Controls */}
-          <div className="bg-gray-800 border-t border-gray-700 p-6">
-        <div className="flex items-center justify-center space-x-4">
-              {session.sessionType === "voice" && (
-                <>
-          <button
-                    onClick={toggleMute}
-                    className={`p-3 rounded-full transition-colors ${
-                      isMuted ? 'bg-red-600 hover:bg-red-700' : 'bg-gray-600 hover:bg-gray-500'
-                    }`}
-                  >
-                    {isMuted ? <MicOff className="w-6 h-6" /> : <Mic className="w-6 h-6" />}
-          </button>
+          {session.sessionType === "voice" && (
+            <div className="bg-white/80 backdrop-blur-md border-t border-white/50 p-6 z-10">
+              <div className="max-w-4xl mx-auto flex items-center justify-center space-x-6">
+                <button
+                  onClick={toggleMute}
+                  className={`p-4 rounded-2xl transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 ${
+                    isMuted 
+                      ? 'bg-gradient-to-r from-red-500 to-rose-600 hover:from-red-600 hover:to-rose-700 text-white' 
+                      : 'bg-white text-gray-700 hover:bg-gray-50 border-2 border-gray-200'
+                  }`}
+                  title={isMuted ? "Unmute" : "Mute"}
+                >
+                  {isMuted ? <MicOff className="w-6 h-6" /> : <Mic className="w-6 h-6" />}
+                </button>
 
-          <button
-                    onClick={toggleSpeaker}
-                    className={`p-3 rounded-full transition-colors ${
-                      isSpeakerOn ? 'bg-gray-600 hover:bg-gray-500' : 'bg-gray-700 hover:bg-gray-600'
-                    }`}
-                  >
-                    {isSpeakerOn ? <Volume2 className="w-6 h-6" /> : <VolumeX className="w-6 h-6" />}
-          </button>
-                </>
-              )}
+                <button
+                  onClick={toggleSpeaker}
+                  className={`p-4 rounded-2xl transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 ${
+                    isSpeakerOn 
+                      ? 'bg-white text-gray-700 hover:bg-gray-50 border-2 border-gray-200' 
+                      : 'bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700 text-white'
+                  }`}
+                  title={isSpeakerOn ? "Mute Speaker" : "Unmute Speaker"}
+                >
+                  {isSpeakerOn ? <Volume2 className="w-6 h-6" /> : <VolumeX className="w-6 h-6" />}
+                </button>
 
-          <button
-                onClick={() => {
-                  // Test audio playback
-                  if (localVideoRef.current) {
-                    localVideoRef.current.play().then(() => {
-                      console.log("Local audio playing");
-                    }).catch(e => console.error("Local audio play failed:", e));
-                  }
-                }}
-                className="bg-blue-600 hover:bg-blue-700 p-3 rounded-full transition-colors"
-                title="Test Audio"
-              >
-                🔊
-          </button>
-
-          <button
-                onClick={leaveSession}
-                className="bg-red-600 hover:bg-red-700 p-3 rounded-full transition-colors"
-              >
-                <PhoneOff className="w-6 h-6" />
-          </button>
+                <button
+                  onClick={() => {
+                    // Test audio playback
+                    if (localVideoRef.current) {
+                      localVideoRef.current.play().then(() => {
+                        console.log("Local audio playing");
+                      }).catch(e => console.error("Local audio play failed:", e));
+                    }
+                  }}
+                  className="p-4 rounded-2xl bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+                  title="Test Audio"
+                >
+                  <span className="text-xl">🔊</span>
+                </button>
+              </div>
             </div>
-          </div>
+          )}
         </div>
 
         {/* Participants Sidebar */}
-        <div className="w-80 bg-gray-800 border-l border-gray-700 p-6">
-          <h3 className="text-lg font-semibold mb-4">Participants</h3>
-          <div className="space-y-3">
-            {participants.map((participant) => (
-              <div key={participant.userId} className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-teal-600 rounded-full flex items-center justify-center">
-                  <span className="font-bold">
+        <div className="w-96 bg-white/90 backdrop-blur-md border-l border-white/50 p-8 overflow-y-auto">
+          <div className="flex items-center space-x-3 mb-8">
+            <div className="bg-gradient-to-br from-teal-500 to-blue-600 p-3 rounded-2xl">
+              <Users className="w-6 h-6 text-white" />
+            </div>
+            <div>
+              <h3 className="text-xl font-bold text-gray-800">Participants</h3>
+              <p className="text-sm text-gray-600">{participants.length} in session</p>
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            {participants.map((participant, index) => (
+              <div 
+                key={participant.userId} 
+                className="bg-white rounded-2xl p-4 shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-200 transform hover:-translate-y-0.5"
+              >
+                <div className="flex items-center space-x-4">
+                  <div className={`w-14 h-14 rounded-2xl flex items-center justify-center text-white font-bold text-lg shadow-lg ${
+                    participant.userId === user.uid
+                      ? 'bg-gradient-to-br from-teal-500 to-blue-600'
+                      : 'bg-gradient-to-br from-purple-500 to-pink-600'
+                  }`}>
                     {participant.userName[0].toUpperCase()}
-                  </span>
-                </div>
-                <div>
-                  <p className="font-medium">{participant.userName}</p>
-                  <p className="text-sm text-gray-400">
-                    {participant.userId === user.uid ? "You" : "Participant"}
-                  </p>
+                  </div>
+                  <div className="flex-1">
+                    <p className="font-semibold text-gray-800 flex items-center space-x-2">
+                      <span>{participant.userName}</span>
+                      {participant.userId === user.uid && (
+                        <span className="text-xs bg-teal-100 text-teal-700 px-2 py-0.5 rounded-full font-medium">You</span>
+                      )}
+                    </p>
+                    <p className="text-sm text-gray-500 flex items-center space-x-1 mt-1">
+                      <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                      <span>Active now</span>
+                    </p>
+                  </div>
                 </div>
               </div>
             ))}
+          </div>
+
+          {/* Session Info Card */}
+          <div className="mt-8 bg-gradient-to-br from-teal-50 to-blue-50 rounded-2xl p-6 border border-teal-100">
+            <h4 className="font-semibold text-gray-800 mb-3 flex items-center space-x-2">
+              <Shield className="w-5 h-5 text-teal-600" />
+              <span>Session Info</span>
+            </h4>
+            <div className="space-y-2 text-sm text-gray-600">
+              <div className="flex items-center justify-between">
+                <span>Type:</span>
+                <span className="font-medium text-gray-800">
+                  {session.sessionType === "voice" ? "Voice Call" : "Text Chat"}
+                </span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span>Max Participants:</span>
+                <span className="font-medium text-gray-800">{session.maxParticipants}</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span>Status:</span>
+                <span className="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium">
+                  Active
+                </span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
