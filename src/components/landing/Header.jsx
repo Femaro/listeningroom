@@ -5,9 +5,9 @@ export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const navigationItems = [
-    { label: "How It Works", href: "/how-it-works" },
+    { label: "Home", href: "/" },
+    { label: "About", href: "/about" },
     { label: "Donate", href: "/donate" },
-    { label: "Volunteer", href: "/volunteer" },
     { label: "FAQ", href: "/faq" },
     { label: "Contact", href: "/contact" },
   ];
