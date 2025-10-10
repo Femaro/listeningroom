@@ -84,11 +84,11 @@ function MainComponent() {
         highContrast: false,
       });
 
-      // Redirect based on user type
+      // Redirect to get-started flow based on user type
       if (formData.userType === "volunteer") {
-        window.location.href = "/volunteer/dashboard";
+        window.location.href = "/volunteer/get-started";
       } else if (formData.userType === "seeker") {
-        window.location.href = "/seeker/dashboard";
+        window.location.href = "/seeker/get-started";
       } else {
         window.location.href = "/dashboard";
       }
