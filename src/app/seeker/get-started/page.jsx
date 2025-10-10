@@ -21,54 +21,30 @@ export default function SeekerGetStarted() {
     {
       number: 1,
       icon: Search,
-      title: "Find Support When You Need It",
-      subtitle: "Browse available volunteer listeners",
-      content: [
-        "View real-time available sessions from trained volunteer listeners",
-        "Choose between voice calls or text chat based on your comfort level",
-        "Filter by language, topic, or availability",
-        "All volunteers are trained in active listening and empathy",
-      ],
-      image: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=800&h=500&fit=crop",
+      title: "Browse Available Listeners",
+      description: "Find a trained volunteer ready to listen",
+      image: "https://cdni.iconscout.com/illustration/premium/thumb/people-searching-for-volunteer-illustration-download-in-svg-png-gif-file-formats--volunteers-charity-donation-pack-illustrations-6430447.png",
     },
     {
       number: 2,
       icon: MessageCircle,
-      title: "Connect & Share Safely",
-      subtitle: "Anonymous, confidential conversations",
-      content: [
-        "Join a session with just one click - no personal info required",
-        "Your identity remains completely anonymous",
-        "All conversations are private and confidential",
-        "Leave anytime you feel uncomfortable - no questions asked",
-      ],
-      image: "https://images.unsplash.com/photo-1544027993-37dbfe43562a?w=800&h=500&fit=crop",
+      title: "Start a Conversation",
+      description: "Connect via voice call or text chat - completely anonymous",
+      image: "https://cdni.iconscout.com/illustration/premium/thumb/online-chatting-illustration-download-in-svg-png-gif-file-formats--conversation-messaging-business-communication-pack-illustrations-4713346.png",
     },
     {
       number: 3,
       icon: Shield,
-      title: "Your Safety is Our Priority",
-      subtitle: "Protected & supported environment",
-      content: [
-        "Report any inappropriate behavior with one click",
-        "Access crisis resources 24/7 if you need emergency help",
-        "Our volunteers are trained in crisis recognition",
-        "We monitor sessions to ensure community guidelines are followed",
-      ],
-      image: "https://images.unsplash.com/photo-1516302752625-fcc3c50ae61f?w=800&h=500&fit=crop",
+      title: "Safe & Confidential",
+      description: "Your privacy is protected - leave anytime you want",
+      image: "https://cdni.iconscout.com/illustration/premium/thumb/data-security-illustration-download-in-svg-png-gif-file-formats--privacy-protection-cyber-pack-network-communications-illustrations-4713354.png",
     },
     {
       number: 4,
       icon: Heart,
-      title: "You're Not Alone",
-      subtitle: "A global community ready to listen",
-      content: [
-        "Join a community of thousands who've found support here",
-        "Available 24/7 across 40+ countries worldwide",
-        "Free peer support - your first 5 minutes always free",
-        "Remember: We provide peer support, not professional therapy",
-      ],
-      image: "https://images.unsplash.com/photo-1528459801416-a9e53bbf4e17?w=800&h=500&fit=crop",
+      title: "You're Ready!",
+      description: "Join thousands finding support in our global community",
+      image: "https://cdni.iconscout.com/illustration/premium/thumb/global-community-illustration-download-in-svg-png-gif-file-formats--worldwide-network-people-world-connection-pack-illustrations-6430449.png",
     },
   ];
 
@@ -88,143 +64,88 @@ export default function SeekerGetStarted() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-cyan-50 via-teal-50 to-sky-50 py-8 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-5xl mx-auto">
+    <div className="min-h-screen bg-gradient-to-br from-cyan-50 via-teal-50 to-sky-50 flex items-center justify-center py-8 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-2xl w-full">
         {/* Skip Button */}
-        <div className="flex justify-end mb-4">
+        <div className="flex justify-end mb-6">
           <button
             onClick={handleSkip}
-            className="text-gray-600 hover:text-teal-600 font-medium transition-colors"
+            className="text-gray-500 hover:text-teal-600 font-medium text-sm transition-colors"
           >
-            Skip tutorial →
+            Skip →
           </button>
         </div>
 
-        {/* Progress Bar */}
-        <div className="mb-8">
-          <div className="flex items-center justify-center space-x-2">
+        {/* Main Card */}
+        <div className="bg-white rounded-3xl shadow-2xl overflow-hidden">
+          {/* Progress Dots */}
+          <div className="flex justify-center items-center space-x-3 pt-8 pb-6">
             {steps.map((step) => (
-              <div key={step.number} className="flex items-center">
-                <div
-                  className={`w-10 h-10 rounded-full flex items-center justify-center font-bold transition-all duration-300 ${
-                    step.number === currentStep
-                      ? "bg-gradient-to-r from-cyan-500 to-teal-500 text-white scale-110 shadow-lg"
-                      : step.number < currentStep
-                      ? "bg-teal-500 text-white"
-                      : "bg-white/50 text-gray-400 border-2 border-gray-300"
-                  }`}
-                >
-                  {step.number < currentStep ? (
-                    <CheckCircle className="w-6 h-6" />
-                  ) : (
-                    step.number
-                  )}
-                </div>
-                {step.number < 4 && (
-                  <div
-                    className={`w-12 sm:w-20 h-1 mx-1 transition-all duration-300 ${
-                      step.number < currentStep ? "bg-teal-500" : "bg-gray-300"
-                    }`}
-                  />
-                )}
-              </div>
+              <div
+                key={step.number}
+                className={`h-2 rounded-full transition-all duration-300 ${
+                  step.number === currentStep
+                    ? "w-8 bg-gradient-to-r from-cyan-500 to-teal-500"
+                    : step.number < currentStep
+                    ? "w-2 bg-teal-400"
+                    : "w-2 bg-gray-300"
+                }`}
+              />
             ))}
           </div>
-          <div className="text-center mt-4">
-            <p className="text-sm text-gray-600">
-              Step {currentStep} of 4: {currentStepData.subtitle}
+
+          {/* Illustration */}
+          <div className="px-8 pt-4">
+            <div className="relative w-full h-64 flex items-center justify-center bg-gradient-to-br from-cyan-50 to-teal-50 rounded-2xl overflow-hidden">
+              <img
+                src={currentStepData.image}
+                alt={currentStepData.title}
+                className="w-full h-full object-contain p-8"
+              />
+            </div>
+          </div>
+
+          {/* Content */}
+          <div className="px-8 py-8 text-center">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-cyan-100 to-teal-100 rounded-2xl mb-6">
+              <currentStepData.icon className="w-8 h-8 text-teal-600" />
+            </div>
+
+            <h2 className="text-3xl font-bold text-gray-900 mb-3">
+              {currentStepData.title}
+            </h2>
+            
+            <p className="text-xl text-gray-600 mb-8 leading-relaxed">
+              {currentStepData.description}
             </p>
-          </div>
-        </div>
 
-        {/* Main Content Card */}
-        <div className="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl border border-teal-100/60 overflow-hidden">
-          {/* Image Section */}
-          <div className="relative h-64 sm:h-80 overflow-hidden">
-            <img
-              src={currentStepData.image}
-              alt={currentStepData.title}
-              className="w-full h-full object-cover"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-            <div className="absolute bottom-6 left-6 right-6">
-              <div className="flex items-center space-x-4 mb-4">
-                <div className="w-16 h-16 bg-white/95 backdrop-blur-xl rounded-2xl flex items-center justify-center shadow-lg">
-                  <currentStepData.icon className="w-8 h-8 text-teal-600" />
-                </div>
-                <div>
-                  <h2 className="text-3xl font-bold text-white mb-1">
-                    {currentStepData.title}
-                  </h2>
-                  <p className="text-teal-100 text-lg">{currentStepData.subtitle}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Content Section */}
-          <div className="p-8 sm:p-12">
-            <div className="space-y-4 mb-8">
-              {currentStepData.content.map((item, index) => (
-                <div
-                  key={index}
-                  className="flex items-start space-x-4 bg-teal-50 rounded-2xl p-4 hover:bg-teal-100 transition-colors"
-                >
-                  <div className="flex-shrink-0 w-6 h-6 bg-gradient-to-br from-cyan-500 to-teal-500 rounded-full flex items-center justify-center mt-0.5">
-                    <CheckCircle className="w-4 h-4 text-white" />
-                  </div>
-                  <p className="text-gray-700 text-lg leading-relaxed">{item}</p>
-                </div>
-              ))}
-            </div>
-
-            {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4">
-              <button
-                onClick={handleNext}
-                className="flex-1 bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-600 hover:to-teal-600 text-white px-8 py-4 rounded-2xl font-bold shadow-xl hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300 flex items-center justify-center space-x-2"
-              >
-                <span>{currentStep === 4 ? "Go to Dashboard" : "Next"}</span>
-                <ArrowRight className="w-5 h-5" />
-              </button>
+            {/* Navigation Buttons */}
+            <div className="flex gap-3">
               {currentStep > 1 && (
                 <button
                   onClick={() => setCurrentStep(currentStep - 1)}
-                  className="bg-white border-2 border-teal-300 text-teal-700 px-8 py-4 rounded-2xl font-bold hover:bg-teal-50 transition-all duration-300"
+                  className="flex-1 bg-gray-100 text-gray-700 px-6 py-4 rounded-2xl font-semibold hover:bg-gray-200 transition-all"
                 >
                   Back
                 </button>
               )}
+              <button
+                onClick={handleNext}
+                className="flex-1 bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-600 hover:to-teal-600 text-white px-6 py-4 rounded-2xl font-bold shadow-lg hover:shadow-xl transition-all flex items-center justify-center space-x-2"
+              >
+                <span>{currentStep === 4 ? "Get Started" : "Next"}</span>
+                <ArrowRight className="w-5 h-5" />
+              </button>
             </div>
           </div>
         </div>
 
-        {/* Quick Tips */}
-        {currentStep === 4 && (
-          <div className="mt-8 bg-gradient-to-r from-cyan-500 to-teal-500 rounded-3xl p-8 text-white">
-            <h3 className="text-2xl font-bold mb-4 flex items-center">
-              <Users className="w-6 h-6 mr-3" />
-              Ready to start?
-            </h3>
-            <div className="grid sm:grid-cols-3 gap-4">
-              <div className="bg-white/20 backdrop-blur-xl rounded-2xl p-4">
-                <Clock className="w-8 h-8 mb-2" />
-                <p className="font-semibold mb-1">24/7 Available</p>
-                <p className="text-sm text-teal-50">Support anytime, anywhere</p>
-              </div>
-              <div className="bg-white/20 backdrop-blur-xl rounded-2xl p-4">
-                <Lock className="w-8 h-8 mb-2" />
-                <p className="font-semibold mb-1">100% Anonymous</p>
-                <p className="text-sm text-teal-50">Your privacy protected</p>
-              </div>
-              <div className="bg-white/20 backdrop-blur-xl rounded-2xl p-4">
-                <Heart className="w-8 h-8 mb-2" />
-                <p className="font-semibold mb-1">Free Support</p>
-                <p className="text-sm text-teal-50">First 5 minutes free</p>
-              </div>
-            </div>
-          </div>
-        )}
+        {/* Step Indicator */}
+        <div className="text-center mt-6">
+          <p className="text-sm text-gray-600">
+            {currentStep} of {steps.length}
+          </p>
+        </div>
       </div>
     </div>
   );
