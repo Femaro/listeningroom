@@ -57,6 +57,11 @@ function MainComponent() {
     }
 
     try {
+      // Check if Firebase is initialized
+      if (!auth || !db) {
+        throw new Error("Authentication service is not ready. Please refresh the page.");
+      }
+
       const cred = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
       await updateProfile(cred.user, { displayName: formData.name });
       

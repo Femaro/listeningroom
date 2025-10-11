@@ -153,6 +153,11 @@ export default function VolunteerRegister() {
     setError(null);
 
     try {
+      // Check if Firebase is initialized
+      if (!auth || !db) {
+        throw new Error("Authentication service is not ready. Please refresh the page.");
+      }
+
       // Create Firebase Auth account
       const cred = await createUserWithEmailAndPassword(
         auth,

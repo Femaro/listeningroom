@@ -24,6 +24,11 @@ function MainComponent() {
     }
 
     try {
+      // Check if Firebase is initialized
+      if (!auth || !db) {
+        throw new Error("Authentication service is not ready. Please refresh the page.");
+      }
+
       const cred = await signInWithEmailAndPassword(auth, email, password);
       
       // STRICT: Check if email is verified - redirect to activation page if not

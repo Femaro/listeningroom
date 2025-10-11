@@ -82,6 +82,11 @@ export default function RegisterPage() {
     setError(null);
 
     try {
+      // Check if Firebase is initialized
+      if (!auth || !db) {
+        throw new Error("Authentication service is not ready. Please refresh the page.");
+      }
+
       // Create account in Firebase Auth
       const cred = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
       // Set display name
