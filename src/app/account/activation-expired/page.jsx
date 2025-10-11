@@ -11,6 +11,11 @@ export default function ActivationExpiredPage() {
   const [error, setError] = useState(null);
 
   const handleResendEmail = async () => {
+    if (!auth) {
+      setError("Authentication service not available. Please refresh the page.");
+      return;
+    }
+
     setResendLoading(true);
     setError(null);
     setResendSuccess(false);

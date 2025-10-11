@@ -14,6 +14,11 @@ export default function AwaitingActivationPage() {
   const [countdown, setCountdown] = useState(0);
 
   useEffect(() => {
+    // Only run on client-side
+    if (typeof window === 'undefined' || !auth) {
+      return;
+    }
+
     // Check if user is logged in
     const unsubscribe = auth.onAuthStateChanged((currentUser) => {
       if (!currentUser) {
@@ -99,6 +104,8 @@ export default function AwaitingActivationPage() {
   };
 
   const handleSignOut = async () => {
+    if (!auth) return;
+    
     try {
       await signOut(auth);
       window.location.href = "/";
