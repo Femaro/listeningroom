@@ -282,10 +282,34 @@ export default function AwaitingActivationPage() {
               </button>
             </div>
 
+            {/* Spam Folder Warning - Prominent */}
+            <div className="bg-yellow-50 border-2 border-yellow-300 rounded-xl p-5 shadow-sm">
+              <div className="flex items-start">
+                <div className="flex-shrink-0">
+                  <AlertCircle className="h-6 w-6 text-yellow-600 mt-1" />
+                </div>
+                <div className="ml-3 flex-1">
+                  <h4 className="font-bold text-yellow-900 mb-2 text-base">📧 Check Your Spam Folder!</h4>
+                  <p className="text-sm text-yellow-800 mb-3">
+                    Verification emails often end up in spam. Please check your <strong>Spam</strong> or <strong>Junk</strong> folder.
+                  </p>
+                  <div className="bg-yellow-100 rounded-lg p-3 text-sm text-yellow-900">
+                    <p className="font-semibold mb-2">To ensure you receive our emails:</p>
+                    <ul className="list-disc list-inside space-y-1 ml-1">
+                      <li>Look for: <code className="bg-yellow-200 px-1 py-0.5 rounded text-xs">noreply@listening-room-4a0a6.firebaseapp.com</code></li>
+                      <li>Mark as "Not Spam" or "Not Junk"</li>
+                      <li>Add to your contacts or safe senders list</li>
+                      <li>Move the email to your Inbox</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             {/* Help Text */}
             <div className="mt-6 text-center">
               <p className="text-sm text-gray-600">
-                Didn't receive the email? Check your spam folder or click "Resend Verification Email" above.
+                Still can't find it? Use "Resend Verification Email" button above or contact support.
               </p>
             </div>
           </div>
