@@ -19,6 +19,14 @@ export default function SeekerDashboard() {
   const [isMatching, setIsMatching] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
 
+  // STRICT: Block unverified users
+  useEffect(() => {
+    if (!loading && user && !user.emailVerified) {
+      window.location.href = "/account/awaiting-activation";
+      return;
+    }
+  }, [user, loading]);
+
   useEffect(() => {
     // For now, we'll set activeSession to null since we're using the new session system
     // This can be enhanced later to check for active sessions in Firestore

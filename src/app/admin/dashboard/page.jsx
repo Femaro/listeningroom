@@ -71,6 +71,14 @@ export default function AdminDashboard() {
   const [error, setError] = useState(null);
   const [initialized, setInitialized] = useState(false);
 
+  // STRICT: Block unverified users (even admins must verify email)
+  useEffect(() => {
+    if (!authLoading && user && !user.emailVerified) {
+      window.location.href = "/account/awaiting-activation";
+      return;
+    }
+  }, [user, authLoading]);
+
   // Data states
   const [sessions, setSessions] = useState([]);
   const [users, setUsers] = useState([]);

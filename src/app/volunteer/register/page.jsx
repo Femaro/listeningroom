@@ -163,18 +163,11 @@ export default function VolunteerRegister() {
       // Update display name
       await updateProfile(cred.user, { displayName: formData.name });
 
-      // Send email verification
-      try {
-        const actionCodeSettings = {
-          url: `${window.location.origin}/volunteer/get-started`,
-          handleCodeInApp: false,
-        };
-        await sendEmailVerification(cred.user, actionCodeSettings);
-      } catch (emailError) {
-        console.warn("Email verification failed:", emailError);
-      }
+      // Store activation token expiration in Firestore
+      const activationExpiresAt = new Date();
+      activationExpiresAt.setHours(activationExpiresAt.getHours() + 24); // 24 hour expiration
 
-      // Create Firestore user profile
+      // Create Firestore user profile with activation tracking
       await setDoc(doc(db, "users", cred.user.uid), {
         name: formData.name,
         email: formData.email,
@@ -187,6 +180,9 @@ export default function VolunteerRegister() {
         experience: formData.experience,
         hoursPerWeek: formData.hoursPerWeek,
         motivation: formData.motivation,
+        emailVerified: false,
+        activationEmailSentAt: serverTimestamp(),
+        activationExpiresAt: activationExpiresAt,
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
         // Default settings
@@ -203,8 +199,19 @@ export default function VolunteerRegister() {
         status: "pending", // pending, approved, suspended
       });
 
-      // Redirect to volunteer onboarding flow
-      window.location.href = "/volunteer/get-started";
+      // Send email verification
+      try {
+        const actionCodeSettings = {
+          url: `${window.location.origin}/dashboard`,
+          handleCodeInApp: false,
+        };
+        await sendEmailVerification(cred.user, actionCodeSettings);
+      } catch (emailError) {
+        console.warn("Email verification failed:", emailError);
+      }
+
+      // Redirect to awaiting activation page (STRICT - no dashboard access)
+      window.location.href = "/account/awaiting-activation";
     } catch (err) {
       console.error("Registration error:", err);
       

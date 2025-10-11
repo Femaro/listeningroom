@@ -35,6 +35,14 @@ export default function VolunteerDashboard() {
   const [showHelp, setShowHelp] = useState(false);
   const [isFirstTime, setIsFirstTime] = useState(false);
 
+  // STRICT: Block unverified users
+  useEffect(() => {
+    if (!loading && user && !user.emailVerified) {
+      window.location.href = "/account/awaiting-activation";
+      return;
+    }
+  }, [user, loading]);
+
   useEffect(() => {
     const hasVisitedBefore = localStorage.getItem(
       `volunteer_visited_before_${user?.id}`,

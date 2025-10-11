@@ -60,10 +60,26 @@ function MainComponent() {
       const cred = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
       await updateProfile(cred.user, { displayName: formData.name });
       
-      // Try to send email verification, but don't fail if domain isn't configured
+      // Store activation token expiration in Firestore
+      const activationExpiresAt = new Date();
+      activationExpiresAt.setHours(activationExpiresAt.getHours() + 24); // 24 hour expiration
+
+      // Create user profile with activation tracking
+      await setDoc(doc(db, "users", cred.user.uid), {
+        name: formData.name,
+        email: formData.email,
+        userType: "seeker", // Default for signup page
+        emailVerified: false,
+        activationEmailSentAt: serverTimestamp(),
+        activationExpiresAt: activationExpiresAt,
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp(),
+      });
+      
+      // Send email verification
       try {
         const actionCodeSettings = {
-          url: window.location.origin + '/onboarding',
+          url: window.location.origin + '/dashboard',
           handleCodeInApp: false,
         };
         
@@ -74,13 +90,13 @@ function MainComponent() {
         // Don't throw the error - user creation was successful
       }
       
-      setSuccess("Account created successfully! Please check your email and verify your account before signing in.");
+      setSuccess("Account created! Please verify your email to continue.");
       setLoading(false);
       
-      // Redirect to onboarding flow after a delay
+      // Redirect to awaiting activation page (STRICT - no dashboard access)
       setTimeout(() => {
-        window.location.href = "/onboarding";
-      }, 3000);
+        window.location.href = "/account/awaiting-activation";
+      }, 2000);
     } catch (err) {
       console.error('Signup error:', err);
       

@@ -25,6 +25,13 @@ function MainComponent() {
   useEffect(() => {
     if (!loading && !user) {
       window.location.href = "/account/signin";
+      return;
+    }
+
+    // STRICT: Block unverified users
+    if (user && !user.emailVerified) {
+      window.location.href = "/account/awaiting-activation";
+      return;
     }
   }, [user, loading]);
 

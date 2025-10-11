@@ -15,6 +15,12 @@ export default function DashboardRouter() {
       return;
     }
 
+    // STRICT: Block unverified users
+    if (user && !user.emailVerified) {
+      window.location.href = "/account/awaiting-activation";
+      return;
+    }
+
     if (user && userProfile) {
       // Route based on user type from Firestore profile
       switch (userProfile.userType) {

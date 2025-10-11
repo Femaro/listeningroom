@@ -87,15 +87,31 @@ export default function RegisterPage() {
       // Set display name
       await updateProfile(cred.user, { displayName: formData.name });
       
+      // Store activation token expiration in Firestore
+      const activationExpiresAt = new Date();
+      activationExpiresAt.setHours(activationExpiresAt.getHours() + 24); // 24 hour expiration
+
+      // Create user profile with activation tracking
+      await setDoc(doc(db, "users", cred.user.uid), {
+        name: formData.name,
+        email: formData.email,
+        userType: formData.userType,
+        emailVerified: false,
+        activationEmailSentAt: serverTimestamp(),
+        activationExpiresAt: activationExpiresAt,
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp(),
+      });
+
       // Send email verification with redirect URL
       const actionCodeSettings = {
-        url: `${window.location.origin}/onboarding`,
+        url: `${window.location.origin}/dashboard`,
         handleCodeInApp: false,
       };
       await sendEmailVerification(cred.user, actionCodeSettings);
 
-      // Redirect to onboarding flow
-      window.location.href = "/onboarding";
+      // Redirect to awaiting activation page (STRICT - no dashboard access)
+      window.location.href = "/account/awaiting-activation";
 
     } catch (err) {
       console.error("Registration error:", err);

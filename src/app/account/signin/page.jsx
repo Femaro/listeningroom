@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { auth, db } from "@/utils/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
 import { Heart, Info, Home, HelpCircle, Shield, ArrowLeft } from "lucide-react";
 
 function MainComponent() {
@@ -26,11 +26,22 @@ function MainComponent() {
     try {
       const cred = await signInWithEmailAndPassword(auth, email, password);
       
-      // Check if email is verified
+      // STRICT: Check if email is verified - redirect to activation page if not
       if (!cred.user.emailVerified) {
-        setError("Please verify your email address before signing in. Check your inbox for a verification email.");
-        setLoading(false);
+        // Sign in successful but email not verified - redirect to awaiting activation
+        window.location.href = "/account/awaiting-activation";
         return;
+      }
+      
+      // Update emailVerified status in Firestore
+      try {
+        await setDoc(doc(db, "users", cred.user.uid), {
+          emailVerified: true,
+          emailVerifiedAt: serverTimestamp(),
+          updatedAt: serverTimestamp(),
+        }, { merge: true });
+      } catch (updateError) {
+        console.warn("Failed to update email verification status:", updateError);
       }
       
       // Route based on userType stored in Firestore
