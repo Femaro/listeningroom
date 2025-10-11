@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 export default function useAdminDashboardData(isAdmin) {
   const [loading, setLoading] = useState(false);
@@ -15,13 +15,7 @@ export default function useAdminDashboardData(isAdmin) {
     payments: [],
   });
 
-  useEffect(() => {
-    if (isAdmin) {
-      loadDashboardData();
-    }
-  }, [isAdmin]);
-
-  const loadDashboardData = async () => {
+  const loadDashboardData = useCallback(async () => {
     setLoading(true);
     try {
       const [
@@ -68,7 +62,13 @@ export default function useAdminDashboardData(isAdmin) {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    if (isAdmin) {
+      loadDashboardData();
+    }
+  }, [isAdmin, loadDashboardData]);
 
   return { data, loading };
 }

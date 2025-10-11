@@ -5,13 +5,13 @@ import { getFirestore } from 'firebase/firestore';
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: 'AIzaSyDlVrMCBIc1mRmzdqioQHDWjMLtBw_PtS0',
-  authDomain: 'listening-room-4a0a6.firebaseapp.com',
-  projectId: 'listening-room-4a0a6',
-  storageBucket: 'listening-room-4a0a6.firebasestorage.app',
-  messagingSenderId: '135218011074',
-  appId: '1:135218011074:web:bf86618b096f40d1bed45b',
-  measurementId: 'G-E2YYCFB00K',
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
 };
 
 // Initialize Firebase (singleton across HMR/reloads)

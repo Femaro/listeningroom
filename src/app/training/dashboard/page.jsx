@@ -16,6 +16,7 @@ import {
   Lock
 } from "lucide-react";
 import useUser from "@/utils/useUser";
+import DOMPurify from "dompurify";
 
 export default function TrainingDashboardPage() {
   const { data: user, loading: userLoading } = useUser();
@@ -214,7 +215,7 @@ export default function TrainingDashboardPage() {
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8 mb-8">
             <div className="prose max-w-none">
               {selectedModule.content && (
-                <div dangerouslySetInnerHTML={{ __html: selectedModule.content }} />
+                <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(selectedModule.content) }} />
               )}
             </div>
           </div>

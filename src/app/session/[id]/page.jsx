@@ -26,6 +26,8 @@ export default function SessionRoom({ params }) {
   const remoteVideoRefs = useRef(new Map());
   const peerConnections = useRef(new Map());
   const localStreamRef = useRef(null);
+  const isAddingUserRef = useRef(false);
+  const isInitializingWebRTCRef = useRef(false);
 
   // Get session ID from params or URL
   const sessionId = params?.id || (typeof window !== 'undefined' ? window.location.pathname.split('/').pop() : null);
@@ -77,13 +79,19 @@ export default function SessionRoom({ params }) {
           return;
         }
 
-        // Automatically add user to session
-        addUserToSession();
+        // Automatically add user to session (prevent duplicate calls)
+        if (!isAddingUserRef.current) {
+          isAddingUserRef.current = true;
+          addUserToSession().finally(() => {
+            isAddingUserRef.current = false;
+          });
+        }
         return;
       }
 
-      // Initialize WebRTC for voice sessions
-      if (session.sessionType === "voice") {
+      // Initialize WebRTC for voice sessions (prevent duplicate initialization)
+      if (session.sessionType === "voice" && !isInitializingWebRTCRef.current) {
+        isInitializingWebRTCRef.current = true;
         initializeWebRTC();
       }
     }

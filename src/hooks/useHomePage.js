@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import useFirebaseAuth from "@/utils/useFirebaseAuth";
 import { db } from "@/utils/firebase";
 import { collection, query, where, onSnapshot } from "firebase/firestore";
@@ -26,7 +26,7 @@ export default function useHomePage() {
   }, [user, userProfile, userLoading]);
 
   // Fetch available volunteers from API
-  const fetchAvailableVolunteers = async () => {
+  const fetchAvailableVolunteers = useCallback(async () => {
     try {
       const response = await fetch('/api/volunteers/availability');
       if (response.ok) {
@@ -39,7 +39,7 @@ export default function useHomePage() {
     } catch (error) {
       console.error('Error fetching available volunteers:', error);
     }
-  };
+  }, []);
 
   useEffect(() => {
     const detectLocation = async () => {
@@ -162,7 +162,7 @@ export default function useHomePage() {
     fetchAvailableVolunteers();
     const interval = setInterval(fetchAvailableVolunteers, 30000); // Every 30 seconds
     return () => clearInterval(interval);
-  }, []);
+  }, [fetchAvailableVolunteers]);
 
   // Helper functions for currency detection
   const getCurrencyCode = (countryCode) => {

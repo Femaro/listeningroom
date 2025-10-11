@@ -12,8 +12,10 @@ const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial
 // Initialize Firebase services using the shared initializer (already imported above)
 const db = getFirestore();
 const auth = getAuth();
-// Enable Firestore debug logging
-setLogLevel('debug');
+// Enable Firestore debug logging (only in development)
+if (import.meta.env.DEV) {
+  setLogLevel('debug');
+}
 
 // --- Custom Hooks (Typically in a `src/hooks` folder) ---
 
@@ -44,7 +46,7 @@ function useFirestoreData() {
       setIsLoading(false);
     });
     return () => unsubscribe();
-  }, []);
+  }, [initialAuthToken]);
 
   // Effect for real-time data listener.
   // This now uses the imported 'db' instance.
@@ -127,7 +129,7 @@ function AppModal({ isVisible, title, message, type, initialValue, onConfirm, on
           <input
             type="text"
             className="w-full text-gray-700 p-2 rounded border border-gray-300"
-            defaultValue={inputValue}
+            value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
           />
         )}

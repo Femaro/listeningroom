@@ -12,14 +12,15 @@ export function useVolunteerDashboard() {
     const [availability, setAvailability] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    const fetchDashboardData = useCallback(async () => {
-        setLoading(true);
-        try {
-            if (!user) {
-                setLoading(false);
-                return;
-            }
+    useEffect(() => {
+        if (!userLoading && !user) {
+            setLoading(false);
+            return;
+        }
 
+        if (!userLoading && user) {
+            setLoading(true);
+            
             // Set up real-time listener for active sessions
             const sessionsQuery = query(
                 collection(db, "sessions"),
@@ -73,26 +74,15 @@ export function useVolunteerDashboard() {
                 totalHours: 0,
             });
 
-            // Store unsubscribe functions for cleanup
+            setLoading(false);
+
+            // Cleanup function to unsubscribe
             return () => {
                 unsubscribeSessions();
                 unsubscribeAvailability();
             };
-        } catch (error) {
-            console.error("Error fetching dashboard data:", error);
-        } finally {
-            setLoading(false);
         }
-    }, [user]);
-
-    useEffect(() => {
-        if (!userLoading && user) {
-            const cleanup = fetchDashboardData();
-            return cleanup;
-        } else if (!userLoading && !user) {
-            setLoading(false);
-        }
-    }, [user, userLoading, fetchDashboardData]);
+    }, [user, userLoading]);
     
     useEffect(() => {
         if (!user) return;
@@ -130,7 +120,6 @@ export function useVolunteerDashboard() {
         activeSession,
         stats,
         availability,
-        fetchDashboardData,
         handleTimeUpdate,
         handleAutoTerminate,
     };
