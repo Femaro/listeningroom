@@ -3,10 +3,14 @@ import { getAnalytics, isSupported, type Analytics } from 'firebase/analytics';
 import { getAuth, type Auth } from 'firebase/auth';
 import { getFirestore, type Firestore } from 'firebase/firestore';
 
-// Helper to remove quotes from env vars (Vercel adds quotes sometimes)
+// Helper to clean env vars (remove quotes, newlines, whitespace)
 function cleanEnvVar(value: string | undefined): string | undefined {
   if (!value) return value;
-  return value.replace(/^["'](.*)["']$/, '$1');
+  // Remove quotes, newlines, carriage returns, and trim whitespace
+  return value
+    .replace(/^["'](.*)["']$/, '$1')  // Remove quotes
+    .replace(/[\r\n]+/g, '')           // Remove newlines and carriage returns
+    .trim();                            // Remove whitespace
 }
 
 // Your web app's Firebase configuration
