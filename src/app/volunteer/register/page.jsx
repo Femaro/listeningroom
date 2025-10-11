@@ -692,10 +692,15 @@ export default function VolunteerRegister() {
               ) : (
                 <button
                   type="submit"
-                  disabled={loading}
+                  disabled={loading || !firebaseReady}
                   className="flex-1 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white px-6 py-4 rounded-2xl font-bold shadow-lg hover:shadow-xl transition-all flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {loading ? (
+                  {!firebaseReady ? (
+                    <>
+                      <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent"></div>
+                      <span>Initializing...</span>
+                    </>
+                  ) : loading ? (
                     <>
                       <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent"></div>
                       <span>Creating Account...</span>
