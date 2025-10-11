@@ -3,16 +3,33 @@ import { getAnalytics, isSupported, type Analytics } from 'firebase/analytics';
 import { getAuth, type Auth } from 'firebase/auth';
 import { getFirestore, type Firestore } from 'firebase/firestore';
 
+// Helper to remove quotes from env vars (Vercel adds quotes sometimes)
+function cleanEnvVar(value: string | undefined): string | undefined {
+  if (!value) return value;
+  return value.replace(/^["'](.*)["']$/, '$1');
+}
+
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-  appId: import.meta.env.VITE_FIREBASE_APP_ID,
-  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
+  apiKey: cleanEnvVar(import.meta.env.VITE_FIREBASE_API_KEY),
+  authDomain: cleanEnvVar(import.meta.env.VITE_FIREBASE_AUTH_DOMAIN),
+  projectId: cleanEnvVar(import.meta.env.VITE_FIREBASE_PROJECT_ID),
+  storageBucket: cleanEnvVar(import.meta.env.VITE_FIREBASE_STORAGE_BUCKET),
+  messagingSenderId: cleanEnvVar(import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID),
+  appId: cleanEnvVar(import.meta.env.VITE_FIREBASE_APP_ID),
+  measurementId: cleanEnvVar(import.meta.env.VITE_FIREBASE_MEASUREMENT_ID),
 };
+
+// Log config status for debugging
+if (typeof window !== 'undefined') {
+  console.log('Firebase Config Status:', {
+    hasApiKey: !!firebaseConfig.apiKey,
+    hasAuthDomain: !!firebaseConfig.authDomain,
+    hasProjectId: !!firebaseConfig.projectId,
+    projectId: firebaseConfig.projectId,
+    apiKeyStart: firebaseConfig.apiKey?.substring(0, 10),
+  });
+}
 
 // Initialize Firebase only on client-side
 let app: FirebaseApp | undefined;
@@ -25,15 +42,28 @@ let isInitialized = false;
 function initializeFirebase() {
   if (isInitialized) return;
   
+  // Validate config before initializing
+  if (!firebaseConfig.apiKey || !firebaseConfig.projectId) {
+    console.error('Firebase config is missing required values. Check environment variables.');
+    console.error('Config:', {
+      hasApiKey: !!firebaseConfig.apiKey,
+      hasProjectId: !!firebaseConfig.projectId,
+      apiKey: firebaseConfig.apiKey?.substring(0, 10) + '...',
+    });
+    return;
+  }
+  
   try {
     app = getApps().length ? getApp() : initializeApp(firebaseConfig);
     isInitialized = true;
+    console.log('Firebase app initialized successfully');
   } catch (error) {
     console.error('Firebase initialization error:', error);
     // Fallback initialization
     try {
       app = initializeApp(firebaseConfig);
       isInitialized = true;
+      console.log('Firebase app initialized on retry');
     } catch (retryError) {
       console.error('Firebase fallback initialization failed:', retryError);
       return;
@@ -45,6 +75,7 @@ function initializeFirebase() {
     try {
       auth = getAuth(app);
       db = getFirestore(app);
+      console.log('Firebase Auth and Firestore initialized successfully');
     } catch (error) {
       console.error('Firebase services initialization error:', error);
     }
