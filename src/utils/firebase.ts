@@ -19,22 +19,28 @@ let app: FirebaseApp | undefined;
 let auth: Auth | undefined;
 let db: Firestore | undefined;
 let analyticsInstance: Analytics | undefined;
+let isInitialized = false;
 
-// Client-side only initialization
-if (typeof window !== 'undefined') {
+// Function to initialize Firebase
+function initializeFirebase() {
+  if (isInitialized) return;
+  
   try {
     app = getApps().length ? getApp() : initializeApp(firebaseConfig);
+    isInitialized = true;
   } catch (error) {
     console.error('Firebase initialization error:', error);
     // Fallback initialization
     try {
       app = initializeApp(firebaseConfig);
+      isInitialized = true;
     } catch (retryError) {
       console.error('Firebase fallback initialization failed:', retryError);
+      return;
     }
   }
 
-  // Initialize Auth & Firestore only on client
+  // Initialize Auth & Firestore
   if (app) {
     try {
       auth = getAuth(app);
@@ -60,11 +66,22 @@ if (typeof window !== 'undefined') {
   }
 }
 
+// Initialize immediately on client-side
+if (typeof window !== 'undefined') {
+  initializeFirebase();
+}
+
 // Helper to ensure Firebase is initialized (client-side only)
 export function getFirebaseApp(): FirebaseApp {
   if (typeof window === 'undefined') {
     throw new Error('Firebase can only be used on the client side');
   }
+  
+  // Try to initialize if not already done
+  if (!app && !isInitialized) {
+    initializeFirebase();
+  }
+  
   if (!app) {
     throw new Error('Firebase app not initialized');
   }
@@ -75,6 +92,12 @@ export function getFirebaseAuth(): Auth {
   if (typeof window === 'undefined') {
     throw new Error('Firebase Auth can only be used on the client side');
   }
+  
+  // Try to initialize if not already done
+  if (!auth && !isInitialized) {
+    initializeFirebase();
+  }
+  
   if (!auth) {
     throw new Error('Firebase Auth not initialized');
   }
@@ -85,10 +108,21 @@ export function getFirebaseFirestore(): Firestore {
   if (typeof window === 'undefined') {
     throw new Error('Firebase Firestore can only be used on the client side');
   }
+  
+  // Try to initialize if not already done
+  if (!db && !isInitialized) {
+    initializeFirebase();
+  }
+  
   if (!db) {
     throw new Error('Firebase Firestore not initialized');
   }
   return db;
+}
+
+// Helper to check if Firebase is ready
+export function isFirebaseReady(): boolean {
+  return typeof window !== 'undefined' && isInitialized && !!auth && !!db;
 }
 
 // Export instances (may be undefined on server)

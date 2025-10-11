@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { auth, db } from "@/utils/firebase";
 import { createUserWithEmailAndPassword, updateProfile, sendEmailVerification } from "firebase/auth";
 import { doc, setDoc, serverTimestamp } from "firebase/firestore";
@@ -28,6 +28,29 @@ export default function VolunteerRegister() {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [firebaseReady, setFirebaseReady] = useState(false);
+
+  // Wait for Firebase to initialize
+  useEffect(() => {
+    const checkFirebase = setInterval(() => {
+      if (auth && db) {
+        setFirebaseReady(true);
+        clearInterval(checkFirebase);
+      }
+    }, 100);
+
+    const timeout = setTimeout(() => {
+      clearInterval(checkFirebase);
+      if (!auth || !db) {
+        setError("Unable to connect to authentication service. Please refresh the page.");
+      }
+    }, 10000);
+
+    return () => {
+      clearInterval(checkFirebase);
+      clearTimeout(timeout);
+    };
+  }, []);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const [formData, setFormData] = useState({

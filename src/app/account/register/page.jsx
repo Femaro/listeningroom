@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { auth, db } from "@/utils/firebase";
 import { createUserWithEmailAndPassword, updateProfile, sendEmailVerification } from "firebase/auth";
 import { doc, setDoc, serverTimestamp } from "firebase/firestore";
@@ -31,6 +31,30 @@ export default function RegisterPage() {
   const [error, setError] = useState(null);
   const [registrationComplete, setRegistrationComplete] = useState(false);
   const [resendingEmail, setResendingEmail] = useState(false);
+  const [firebaseReady, setFirebaseReady] = useState(false);
+
+  // Wait for Firebase to initialize
+  useEffect(() => {
+    const checkFirebase = setInterval(() => {
+      if (auth && db) {
+        setFirebaseReady(true);
+        clearInterval(checkFirebase);
+      }
+    }, 100);
+
+    // Timeout after 10 seconds
+    const timeout = setTimeout(() => {
+      clearInterval(checkFirebase);
+      if (!auth || !db) {
+        setError("Unable to connect to authentication service. Please refresh the page.");
+      }
+    }, 10000);
+
+    return () => {
+      clearInterval(checkFirebase);
+      clearTimeout(timeout);
+    };
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
